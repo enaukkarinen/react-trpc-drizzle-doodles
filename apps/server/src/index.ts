@@ -3,6 +3,8 @@ import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "@einari/api";
 
+import { db } from "./db/client";
+
 const app = express();
 
 app.use(cors({ origin: "http://localhost:5173" /* Web App */ }));
@@ -11,7 +13,7 @@ app.use(
   "/trpc",
   createExpressMiddleware({
     router: appRouter,
-    createContext: () => ({}),
+    createContext: ({ req, res }) => ({ db, req, res }),
   })
 );
 app.get("/health", (_req, res) => res.json({ ok: true }));
