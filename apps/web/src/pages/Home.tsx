@@ -1,4 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+
+import { useDebounce } from "../hooks/useDebounce";
+import { trpc } from "../trpc";
 
 type FeedbackItem = {
   id: string;
@@ -7,30 +11,6 @@ type FeedbackItem = {
   status: "open" | "planned" | "done";
   createdAt: string; // ISO or display string
 };
-
-const mock: FeedbackItem[] = [
-  {
-    id: "123",
-    title: "Add keyboard shortcuts",
-    summary: "Support j/k navigation and quick actions for power users.",
-    status: "planned",
-    createdAt: "2026-01-12",
-  },
-  {
-    id: "124",
-    title: "Improve map load performance",
-    summary: "Reduce initial tile fetch and defer heavy layers.",
-    status: "open",
-    createdAt: "2026-01-10",
-  },
-  {
-    id: "125",
-    title: "Dark mode (proper)",
-    summary: "Persist theme preference and improve contrast across views.",
-    status: "done",
-    createdAt: "2026-01-02",
-  },
-];
 
 function StatusPill({ status }: { status: FeedbackItem["status"] }) {
   const base =
@@ -54,8 +34,53 @@ function StatusPill({ status }: { status: FeedbackItem["status"] }) {
 }
 
 export function Home() {
-  // Later: wire to tRPC and set search to input filter.
-  const items = mock;
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 100);
+
+  const {
+    data = [],
+    isLoading,
+    isFetching,
+    error,
+  } = trpc.feedback.list.useQuery(
+    { search: debouncedSearch.trim() || undefined },
+    {
+      placeholderData: (prev) => prev, // Reminder: keep previous data while searching
+    }
+  );
+
+  /**
+   * Smooth "Updating…" indicator
+   * - shows immediately when fetching starts
+   * - stays visible for at least 300ms
+   * - prevents flicker on fast responses
+   */
+  const [showUpdating, setShowUpdating] = useState(false);
+  const hideTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isFetching) {
+      if (hideTimer.current) window.clearTimeout(hideTimer.current);
+      setShowUpdating(true);
+      return;
+    }
+
+    hideTimer.current = window.setTimeout(() => {
+      setShowUpdating(false);
+    }, 300);
+
+    return () => {
+      if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    };
+  }, [isFetching]);
+
+  if (isLoading) {
+    return <div className="text-sm text-slate-600">Loading feedback…</div>;
+  }
+
+  if (error) {
+    return <div className="text-sm text-red-600">Error loading feedback.</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -71,9 +96,17 @@ export function Home() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-md">
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-brand-300 focus:ring-4 focus:ring-brand-100"
             placeholder="Search feedback…"
           />
+
+          {showUpdating && !isLoading && (
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-slate-900/70 px-2 py-0.5 text-xs font-medium text-brand-200 ring-1 ring-white/10">
+            Updating…
+          </span>
+          )}
         </div>
 
         <button
@@ -88,11 +121,11 @@ export function Home() {
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-4 py-3">
           <div className="text-sm font-medium text-slate-900">All feedback</div>
-          <div className="text-xs text-slate-500">{items.length} items</div>
+          <div className="text-xs text-slate-500">{data.length} items</div>
         </div>
 
         <ul className="divide-y divide-slate-100">
-          {items.map((item) => (
+          {data.map((item) => (
             <li key={item.id}>
               <Link
                 to={`/feedback/${item.id}`}
