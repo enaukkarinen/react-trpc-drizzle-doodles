@@ -1,23 +1,24 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import About from "./pages/About";
 import { Home } from "./pages/Home";
 import { FeedbackDetail } from "./pages/FeedbackDetail";
+import { NavigationBar } from "./components/NavigationBar";
 
 export default function App() {
   return (
-    <div>
-      <nav className="border-b p-4 flex gap-4">
-        <Link className="underline" to="/">
-          Home
-        </Link>
-        <Link className="underline" to="/feedback/123">
-          Example detail
-        </Link>
-      </nav>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* Navigation */}
+      <NavigationBar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/feedback/:id" element={<FeedbackDetail />} />
-      </Routes>
+      {/* Page content */}
+      <main className="mx-auto max-w-5xl px-4 py-10">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/feedback/:id" element={<FeedbackDetail />} />
+        </Routes>
+      </main>
     </div>
   );
 }
