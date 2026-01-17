@@ -1,55 +1,82 @@
-export default function About() {
+export function About() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-4xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12">
-            <h1 className="text-4xl font-bold text-white mb-2">About Us</h1>
-            <p className="text-blue-100 text-lg">
-              Learn more about our mission and story
+    <div className="space-y-6">
+      {/* Header */}
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold text-slate-900">About</h1>
+        <p className="text-sm text-slate-600">
+          A small demo app for collecting and browsing feedback.
+        </p>
+      </header>
+
+      {/* Main card */}
+      <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-100 px-4 py-4">
+          <div className="text-sm font-medium text-slate-900">What this is</div>
+          <div className="mt-1 text-sm text-slate-600">
+            React Router + Tailwind + tRPC. The goal is a simple, modern UI with
+            end-to-end types and a clean list/detail flow.
+          </div>
+        </div>
+
+        <div className="grid gap-4 px-4 py-4 sm:grid-cols-2">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div className="text-sm font-semibold text-slate-900">UI</div>
+            <p className="mt-1 text-sm text-slate-600">
+              Tailwind-based layout, brand accents, and reusable components.
             </p>
+            <div className="mt-3 inline-flex items-center rounded-full bg-brand-100 px-2 py-0.5 text-xs font-medium text-brand-500 ring-1 ring-brand-200">
+              Brand: purple
+            </div>
           </div>
 
-          <div className="px-8 py-12">
-            <div className="prose prose-lg max-w-none">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                Our Story
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Welcome to our platform. We're dedicated to creating meaningful
-                experiences and building tools that make a difference in
-                people's lives.
-              </p>
-
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                What We Do
-              </h2>
-              <p className="text-gray-600 mb-6">
-                We focus on innovation, quality, and user satisfaction. Our team
-                works tirelessly to deliver products that exceed expectations
-                and solve real problems.
-              </p>
-
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                Our Values
-              </h2>
-              <ul className="space-y-3 text-gray-600">
-                <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">✓</span>
-                  <span>Excellence in everything we create</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">✓</span>
-                  <span>User-centered design and development</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">✓</span>
-                  <span>Continuous innovation and improvement</span>
-                </li>
-              </ul>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div className="text-sm font-semibold text-slate-900">API</div>
+            <p className="mt-1 text-sm text-slate-600">
+              tRPC for typed queries and mutations. Easy to add auth + DB later.
+            </p>
+            <div className="mt-3 inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 ring-1 ring-slate-200">
+              End-to-end types
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Secondary cards */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="text-sm font-semibold text-slate-900">
+            What’s next
+          </div>
+          <ul className="mt-3 space-y-2 text-sm text-slate-600">
+            <li className="flex gap-2">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
+              Add create/update feedback (mutations)
+            </li>
+            <li className="flex gap-2">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
+              Loading states, empty states, error states
+            </li>
+            <li className="flex gap-2">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-400" />
+              Real persistence (SQLite/Postgres) + filtering
+            </li>
+          </ul>
+        </section>
+
+        <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="text-sm font-semibold text-slate-900">Notes</div>
+          <p className="mt-3 text-sm text-slate-600">
+            This is intentionally lightweight: a clean shell, strong typing, and
+            a UI that feels current without pulling in a heavy component
+            library.
+          </p>
+          <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600">
+            Tip: keep pages using the same{" "}
+            <span className="font-medium">max-w-5xl</span> container so the
+            whole app stays visually aligned.
+          </div>
+        </section>
       </div>
     </div>
   );
