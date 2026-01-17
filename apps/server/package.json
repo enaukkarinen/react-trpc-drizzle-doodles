@@ -1,5 +1,5 @@
 {
-  "name": "@acme/server",
+  "name": "@einari/server",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@acme/api": "workspace:*",
+    "@einari/api": "workspace:*",
     "@trpc/server": "^11.0.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",

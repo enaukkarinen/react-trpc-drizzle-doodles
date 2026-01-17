@@ -14,7 +14,7 @@ importers:
 
   apps/server:
     dependencies:
-      '@acme/api':
+      '@einari/api':
         specifier: workspace:*
         version: link:../../packages/api
       '@trpc/server':
@@ -45,7 +45,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@acme/api':
+      '@einari/api':
         specifier: workspace:*
         version: link:../../packages/api
       '@tanstack/react-query':

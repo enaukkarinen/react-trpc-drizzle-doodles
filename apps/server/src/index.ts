@@ -1,12 +1,19 @@
 import express from "express";
 import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "@acme/api";
+import { appRouter } from "@einari/api";
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" })); // Vite default
-app.use("/trpc", createExpressMiddleware({ router: appRouter }));
+app.use(cors({ origin: "http://localhost:5173" /* Web App */ }));
+
+app.use(
+  "/trpc",
+  createExpressMiddleware({
+    router: appRouter,
+    createContext: () => ({}),
+  })
+);
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 const port = Number(process.env.PORT ?? 3001);
