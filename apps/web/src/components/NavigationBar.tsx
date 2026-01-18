@@ -1,9 +1,8 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export function NavigationBar() {
   const pages = [
     { name: "Home", to: "/" },
-    // { name: "Example detail", to: "/feedback/123" },
     { name: "About", to: "/about" },
   ];
 
