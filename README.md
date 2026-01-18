@@ -42,7 +42,14 @@ PORT=3001
 pnpm db:migrate
 ```
 
-### 5) Run the app (web + server)
+### 5) Generate test records
+
+```bash
+pnpm db:generate
+```
+
+
+### 6) Run the app (web + server)
 
 ```bash
 pnpm dev

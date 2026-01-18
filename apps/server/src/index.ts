@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -19,6 +20,8 @@ app.use(
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 const port = Number(process.env.PORT ?? 3001);
+console.log("Starting server...");
+console.log(port);
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

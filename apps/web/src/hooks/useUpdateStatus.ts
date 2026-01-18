@@ -10,29 +10,19 @@ export function useUpdateStatus() {
   return trpc.feedback.updateStatus.useMutation({
     onMutate: async ({ id, status }) => {
       await utils.feedback.byId.cancel({ id });
-      await utils.feedback.list.cancel();
 
       const prevById = utils.feedback.byId.getData({ id });
-      const prevLists = qc.getQueriesData({ queryKey: FEEDBACK_LIST_KEY });
 
       utils.feedback.byId.setData({ id }, (old) =>
         old ? { ...old, status } : old,
       );
 
-      qc.setQueriesData({ queryKey: FEEDBACK_LIST_KEY }, (old: unknown) => {
+      qc.setQueriesData({ queryKey: FEEDBACK_LIST_KEY }, (old: any) => {
         if (!Array.isArray(old)) return old;
-        return old.map((item: any) =>
-          item.id === id ? { ...item, status } : item,
-        );
+        return old.map((item) => (item.id === id ? { ...item, status } : item));
       });
 
-      return { prevById, prevLists };
-    },
-
-    onError: (_err, { id }, ctx) => {
-      if (ctx?.prevById) utils.feedback.byId.setData({ id }, ctx.prevById);
-      if (ctx?.prevLists)
-        ctx.prevLists.forEach(([key, data]) => qc.setQueryData(key, data));
+      return { prevById };
     },
 
     onSettled: (_data, _err, { id }) => {
