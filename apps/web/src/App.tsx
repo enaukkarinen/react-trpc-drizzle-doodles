@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { About } from "./pages/About";
 import { Home } from "./pages/Home";
@@ -17,6 +17,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/feedback/:id" element={<FeedbackDetail />} />
+
+          <Route path="/feedback" element={<Navigate to="/" replace />} /> {/* Redirect */}
         </Routes>
       </main>
     </div>

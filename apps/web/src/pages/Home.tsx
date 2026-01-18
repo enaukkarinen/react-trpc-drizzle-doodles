@@ -3,35 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useDebounce } from "../hooks/useDebounce";
 import { trpc } from "../trpc";
-
-type FeedbackItem = {
-  id: string;
-  title: string;
-  summary: string;
-  status: "open" | "planned" | "done";
-  createdAt: string; // ISO or display string
-};
-
-function StatusPill({ status }: { status: FeedbackItem["status"] }) {
-  const base =
-    "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1";
-
-  const styles: Record<FeedbackItem["status"], string> = {
-    open: "bg-slate-100 text-slate-700 ring-slate-200",
-    planned: "bg-brand-100 text-brand-500 ring-brand-200",
-    done: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  };
-
-  const label: Record<FeedbackItem["status"], string> = {
-    open: "Open",
-    planned: "Planned",
-    done: "Done",
-  };
-
-  return (
-    <span className={[base, styles[status]].join(" ")}>{label[status]}</span>
-  );
-}
+import { StatusPill } from "../components/StatusPill";
 
 export function Home() {
   const [search, setSearch] = useState("");
@@ -46,15 +18,9 @@ export function Home() {
     { search: debouncedSearch.trim() || undefined },
     {
       placeholderData: (prev) => prev, // Reminder: keep previous data while searching
-    }
+    },
   );
 
-  /**
-   * Smooth "Updating…" indicator
-   * - shows immediately when fetching starts
-   * - stays visible for at least 300ms
-   * - prevents flicker on fast responses
-   */
   const [showUpdating, setShowUpdating] = useState(false);
   const hideTimer = useRef<number | null>(null);
 
@@ -104,8 +70,8 @@ export function Home() {
 
           {showUpdating && !isLoading && (
             <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-slate-900/70 px-2 py-0.5 text-xs font-medium text-brand-200 ring-1 ring-white/10">
-            Updating…
-          </span>
+              Updating…
+            </span>
           )}
         </div>
 
