@@ -1,21 +1,17 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
 import { formatDateTime } from "../utils/formatDateTime";
-import type { FeedbackStatus } from "@einari/db";
+
 import { getNextStatus } from "../utils/getNextStatus";
+import { useUpdateStatus } from "../hooks/useUpdateStatus";
 
 export function FeedbackDetail() {
   const { id } = useParams<{ id: string }>();
 
-  const utils = trpc.useUtils();
-  const updateStatus = trpc.feedback.updateStatus.useMutation({
-    onSuccess: () => {
-      utils.feedback.byId.invalidate({ id: id ?? "" });
-      utils.feedback.list.invalidate();
-    },
-  });
+  const updateStatus = useUpdateStatus();
+  
   const { data } = trpc.feedback.byId.useQuery(
     { id: id ?? "" },
     { enabled: Boolean(id) },
