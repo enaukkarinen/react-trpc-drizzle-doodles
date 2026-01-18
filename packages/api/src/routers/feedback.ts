@@ -36,6 +36,16 @@ export const feedbackRouter = router({
 
       return rows[0] ?? null;
     }),
+  delete: publicProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const rows = await ctx.db
+        .delete(feedback)
+        .where(eq(feedback.id, input.id))
+        .returning({ id: feedback.id });
+
+      return rows[0] ?? null;
+    }),
   create: publicProcedure
     .input(
       z.object({

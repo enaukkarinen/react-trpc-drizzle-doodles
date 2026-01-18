@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
@@ -9,6 +9,8 @@ import { getNextStatus } from "../utils/getNextStatus";
 import { useUpdateSummary, useUpdateTitle, useUpdateStatus } from "../hooks";
 import { EditableSummary } from "../components/EditableSummary";
 
+import { DeleteButton } from "../components/DeleteButton";
+
 export function FeedbackDetail() {
   const { id } = useParams<{ id: string }>();
 
@@ -17,6 +19,7 @@ export function FeedbackDetail() {
     { enabled: Boolean(id) },
   );
 
+  const navigate = useNavigate();
   const updateStatus = useUpdateStatus();
   const updateTitle = useUpdateTitle();
   const updateSummary = useUpdateSummary();
@@ -104,6 +107,11 @@ export function FeedbackDetail() {
           />
         </div>
       </section>
+
+      <DeleteButton
+        id={data.id}
+        onDeleted={() => navigate("/", { replace: true })}
+      />
     </div>
   );
 }

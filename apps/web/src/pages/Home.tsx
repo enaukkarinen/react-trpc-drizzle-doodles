@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
 
 import { useDebounce } from "../hooks/useDebounce";
 import { trpc } from "../trpc";
@@ -98,9 +99,9 @@ export function Home() {
           className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-brand-100"
           type="button"
           onClick={handleCreate}
-            disabled={create.isPending}
+          disabled={create.isPending}
         >
-          <span className="text-base leading-none">＋</span>
+          <Plus className="h-4 w-4 text-slate-300" />
           New feedback
         </button>
       </div>
