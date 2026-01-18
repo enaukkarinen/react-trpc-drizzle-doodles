@@ -1,0 +1,29 @@
+{
+  "name": "@einari/server",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "dotenv -e ../../env/server.env -- tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@einari/api": "workspace:*",
+    "@einari/db": "workspace:^",
+    "@trpc/server": "^11.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
+    "express": "^4.19.2",
+    "postgres": "^3.4.8",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.0",
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0"
+  }
+}

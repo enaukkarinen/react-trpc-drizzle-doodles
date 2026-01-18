@@ -1,5 +1,5 @@
 {
-  "name": "@acme/web",
+  "name": "@einari/web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,10 +10,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@acme/api": "workspace:*",
+    "@einari/api": "workspace:*",
+    "@einari/db": "workspace:^",
     "@tanstack/react-query": "^5.59.0",
     "@trpc/client": "^11.0.0",
     "@trpc/react-query": "^11.0.0",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.562.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
