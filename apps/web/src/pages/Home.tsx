@@ -86,7 +86,7 @@ export function Home() {
 
       {/* List container */}
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between rounded-t-xl bg-slate-900 px-4 py-2">
+        <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-b from-slate-900 to-slate-800 px-4 py-2">
           <div className="text-xs font-medium uppercase tracking-wide text-slate-200">
             All feedback
           </div>
