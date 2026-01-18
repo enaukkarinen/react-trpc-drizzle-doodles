@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { desc, eq, ilike } from "drizzle-orm";
-import { feedback } from "@einari/db";
+import { feedback, FEEDBACK_STATUSES } from "@einari/db";
 import { router, publicProcedure } from "../trpc";
 
 export const feedbackRouter = router({
@@ -33,6 +33,22 @@ export const feedbackRouter = router({
         .from(feedback)
         .where(eq(feedback.id, input.id))
         .limit(1);
+
+      return rows[0] ?? null;
+    }),
+  updateStatus: publicProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        status: z.enum(FEEDBACK_STATUSES),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const rows = await ctx.db
+        .update(feedback)
+        .set({ status: input.status })
+        .where(eq(feedback.id, input.id))
+        .returning();
 
       return rows[0] ?? null;
     }),

@@ -1,17 +1,28 @@
 import { Link, Navigate, useParams } from "react-router-dom";
+
 import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
+import { formatDateTime } from "../utils/formatDateTime";
+import type { FeedbackStatus } from "@einari/db";
+import { getNextStatus } from "../utils/getNextStatus";
 
 export function FeedbackDetail() {
   const { id } = useParams<{ id: string }>();
 
+  const utils = trpc.useUtils();
+  const updateStatus = trpc.feedback.updateStatus.useMutation({
+    onSuccess: () => {
+      utils.feedback.byId.invalidate({ id: id ?? "" });
+       utils.feedback.list.invalidate();
+    }
+  });
   const { data } = trpc.feedback.byId.useQuery(
     { id: id ?? "" },
     { enabled: Boolean(id) },
   );
 
   if (!id) {
-   return <Navigate to="..." replace />;
+    return <Navigate to="..." replace />;
   }
 
   if (!data) {
@@ -44,9 +55,21 @@ export function FeedbackDetail() {
             {data.title}
           </h1>
 
-          <StatusPill status={data.status} />
+          <button
+            type="button"
+            onClick={() =>
+              updateStatus.mutate({
+                id: data.id,
+                status: getNextStatus(data.status as FeedbackStatus),
+              })
+            }
+          >
+            <StatusPill status={data.status as FeedbackStatus} />
+          </button>
 
-          <span className="text-xs text-slate-400">· {data.createdAt}</span>
+          <span className="text-xs text-slate-400">
+            {formatDateTime(data.createdAt)}
+          </span>
         </div>
       </header>
 

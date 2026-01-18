@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDebounce } from "../hooks/useDebounce";
 import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
+import { formatDateTime } from "../utils/formatDateTime";
 
 export function Home() {
   const [search, setSearch] = useState("");
@@ -112,7 +113,7 @@ export function Home() {
                   </div>
 
                   <div className="shrink-0 text-xs text-slate-500">
-                    {item.createdAt}
+                    {formatDateTime(item.createdAt)}
                   </div>
                 </div>
               </Link>
