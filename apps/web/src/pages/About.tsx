@@ -6,7 +6,7 @@ export function About() {
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold text-slate-900">About</h1>
         <p className="text-sm text-slate-600">
-         This applications demonstrates a feedback management system built with a React, tRPC, and Postgres stack.
+         This application demonstrates a feedback management system built with a React, tRPC, and Postgres stack.
         </p>
       </header>
 
