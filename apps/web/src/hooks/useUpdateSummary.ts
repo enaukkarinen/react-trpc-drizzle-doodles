@@ -10,10 +10,8 @@ export function useUpdateSummary() {
   return trpc.feedback.updateSummary.useMutation({
     onMutate: async ({ id, summary }) => {
       await utils.feedback.byId.cancel({ id });
-      await utils.feedback.list.cancel();
 
       const prevById = utils.feedback.byId.getData({ id });
-      const prevLists = qc.getQueriesData({ queryKey: FEEDBACK_LIST_KEY });
 
       utils.feedback.byId.setData({ id }, (old) =>
         old ? { ...old, summary } : old,
@@ -26,16 +24,12 @@ export function useUpdateSummary() {
         );
       });
 
-      return { prevById, prevLists };
+      return { prevById };
     },
 
     onError: (_err, { id }, ctx) => {
-      if (ctx?.prevById) {
-        utils.feedback.byId.setData({ id }, ctx.prevById);
-      }
-      if (ctx?.prevLists) {
-        ctx.prevLists.forEach(([key, data]) => qc.setQueryData(key, data));
-      }
+      if (ctx?.prevById) utils.feedback.byId.setData({ id }, ctx.prevById);
+      utils.feedback.list.invalidate();
     },
 
     onSettled: (_data, _err, { id }) => {

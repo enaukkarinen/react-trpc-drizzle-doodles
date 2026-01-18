@@ -24,7 +24,10 @@ export function useUpdateStatus() {
 
       return { prevById };
     },
-
+    onError: (_err, { id }, ctx) => {
+      if (ctx?.prevById) utils.feedback.byId.setData({ id }, ctx.prevById);
+      utils.feedback.list.invalidate();
+    },
     onSettled: (_data, _err, { id }) => {
       utils.feedback.byId.invalidate({ id });
       utils.feedback.list.invalidate();

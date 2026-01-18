@@ -10,24 +10,26 @@ export function useUpdateTitle() {
   return trpc.feedback.updateTitle.useMutation({
     onMutate: async ({ id, title }) => {
       await utils.feedback.byId.cancel({ id });
-      await utils.feedback.list.cancel();
 
       const prevById = utils.feedback.byId.getData({ id });
-      const prevLists = qc.getQueriesData({ queryKey: FEEDBACK_LIST_KEY });
 
-      utils.feedback.byId.setData({ id }, (old) => (old ? { ...old, title } : old));
+      utils.feedback.byId.setData({ id }, (old) =>
+        old ? { ...old, title } : old,
+      );
 
       qc.setQueriesData({ queryKey: FEEDBACK_LIST_KEY }, (old: unknown) => {
         if (!Array.isArray(old)) return old;
-        return old.map((item: any) => (item.id === id ? { ...item, title } : item));
+        return old.map((item: any) =>
+          item.id === id ? { ...item, title } : item,
+        );
       });
 
-      return { prevById, prevLists };
+      return { prevById };
     },
 
     onError: (_err, { id }, ctx) => {
       if (ctx?.prevById) utils.feedback.byId.setData({ id }, ctx.prevById);
-      if (ctx?.prevLists) ctx.prevLists.forEach(([key, data]) => qc.setQueryData(key, data));
+      utils.feedback.list.invalidate();
     },
 
     onSettled: (_data, _err, { id }) => {
