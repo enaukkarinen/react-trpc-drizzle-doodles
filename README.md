@@ -64,6 +64,16 @@ pnpm db:studio   # (optional) open Drizzle Studio
 pnpm db:reset    # (optional) wipe and re-migrate
 ```
 
+## Troubleshooting
+
+### Postgres auth errors on first run
+
+If you see password authentication failed, check that no other Postgres container is running on the same port and run:
+
+`docker compose down -v`
+
+`docker compose up -d`
+
 ## Repo structure
 
 * apps/web/
