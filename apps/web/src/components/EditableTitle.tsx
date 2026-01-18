@@ -57,7 +57,7 @@ export function EditableTitle({
         <button
           type="button"
           onClick={start}
-          className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-brand-100"
+          className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-brand-100 mt-1"
         >
           Edit
         </button>

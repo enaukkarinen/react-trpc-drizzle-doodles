@@ -51,46 +51,42 @@ export function FeedbackDetail() {
           ← Back to feedback
         </Link>
 
-        <div className="flex items-start justify-between gap-4">
-          {/* Left: title + status */}
-          <div className="min-w-0 space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <EditableTitle
-                value={data.title}
-                isSaving={updateTitle.isPending}
-                onSave={(next) =>
-                  updateTitle.mutate({ id: data.id, title: next })
-                }
-              />
+        <div className="min-w-0 space-y-2">
+          {/* Row 1: Title */}
+          <EditableTitle
+            value={data.title}
+            isSaving={updateTitle.isPending}
+            onSave={(next) => updateTitle.mutate({ id: data.id, title: next })}
+          />
 
-              <div className="group inline-flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleStatusClick}
-                  disabled={updateStatus.isPending}
-                  aria-label="Change status"
-                  title="Click to change status"
-                  className="
-                    inline-flex cursor-pointer items-center rounded-full p-0.5
-                    transition
-                    hover:ring-2 hover:ring-slate-300
-                    focus:outline-none focus:ring-4 focus:ring-brand-100
-                    disabled:cursor-not-allowed disabled:opacity-60
-                  "
-                >
-                  <StatusPill status={data.status} />
-                </button>
+          {/* Row 2: Status + actions */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="group inline-flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleStatusClick}
+                disabled={updateStatus.isPending}
+                aria-label="Change status"
+                title="Click to change status"
+                className="
+          inline-flex cursor-pointer items-center rounded-full p-0.5
+          transition
+          hover:ring-2 hover:ring-slate-300
+          focus:outline-none focus:ring-4 focus:ring-brand-100
+          disabled:cursor-not-allowed disabled:opacity-60
+        "
+              >
+                <StatusPill status={data.status} />
+              </button>
 
-                <span className="text-xs text-slate-400 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
-                  Click to change
-                </span>
-              </div>
+              <span className="text-xs text-slate-400 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                Click to change
+              </span>
             </div>
-          </div>
 
-          {/* Right: created date */}
-          <div className="shrink-0 text-xs text-slate-500">
-            {formatDateTime(data.createdAt)}
+            <div className="shrink-0 text-xs text-slate-500">
+              {formatDateTime(data.createdAt)}
+            </div>
           </div>
         </div>
       </header>
