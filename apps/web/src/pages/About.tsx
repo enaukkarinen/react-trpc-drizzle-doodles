@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export function About() {
   return (
     <div className="space-y-8">
-      {/* Header */}
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold text-slate-900">About</h1>
         <p className="text-sm text-slate-600">
@@ -11,10 +10,8 @@ export function About() {
         </p>
       </header>
 
-      {/* Card */}
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="space-y-6 p-6">
-          {/* Intro */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-slate-900">
               Hi, I’m Einari.
@@ -24,13 +21,12 @@ export function About() {
               <span className="font-medium text-slate-900">
                 EG (Estates Gazette)
               </span>
-              , working on data-heavy, customer-facing products in the property
+              , working on data-heavy, customer-facing products in the commercial property
               space. My role spans front-end architecture, API design, and
               collaboration with product and UX.
             </p>
           </div>
 
-          {/* Background */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-slate-900">Background</div>
             <p className="text-sm leading-6 text-slate-700">
@@ -42,7 +38,6 @@ export function About() {
             </p>
           </div>
 
-          {/* Approach */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-slate-900">Approach</div>
             <p className="text-sm leading-6 text-slate-700">
@@ -59,7 +54,6 @@ export function About() {
             </p>
           </div>
 
-          {/* Learnings */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-slate-900">
               Key learnings
@@ -73,7 +67,6 @@ export function About() {
             </p>
           </div>
 
-          {/* Stack */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-slate-900">Stack</div>
             <ul className="space-y-1 text-sm text-slate-700">
@@ -96,7 +89,6 @@ export function About() {
             </ul>
           </div>
 
-          {/* CTA */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-slate-200 bg-white p-4">
             <div>
               <div className="text-sm font-medium text-slate-900">

@@ -45,21 +45,18 @@ export function FeedbackDetail() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <header className="space-y-3">
         <Link className="text-sm text-brand-500 hover:underline" to="/">
           ← Back to feedback
         </Link>
 
         <div className="min-w-0 space-y-2">
-          {/* Row 1: Title */}
           <EditableTitle
             value={data.title}
             isSaving={updateTitle.isPending}
             onSave={(next) => updateTitle.mutate({ id: data.id, title: next })}
           />
 
-          {/* Row 2: Status + actions */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="group inline-flex items-center gap-2">
               <button
@@ -91,7 +88,6 @@ export function FeedbackDetail() {
         </div>
       </header>
 
-      {/* Content */}
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="px-4 py-4">
           <EditableSummary

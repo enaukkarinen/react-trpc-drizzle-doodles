@@ -70,7 +70,6 @@ export function Home() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold text-slate-900">Feedback</h1>
         <p className="text-sm text-slate-600">
@@ -78,7 +77,6 @@ export function Home() {
         </p>
       </header>
 
-      {/* Controls */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-md">
           <input
@@ -106,7 +104,6 @@ export function Home() {
         </button>
       </div>
 
-      {/* List container */}
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
         <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-b from-slate-900 to-slate-800 px-4 py-2">
           <div className="text-xs font-medium uppercase tracking-wide text-slate-200">
