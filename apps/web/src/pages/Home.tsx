@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useDebounce } from "../hooks/useDebounce";
 import { trpc } from "../trpc";
@@ -9,6 +9,8 @@ import { formatDateTime } from "../utils/formatDateTime";
 export function Home() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 100);
+  const navigate = useNavigate();
+  const utils = trpc.useUtils();
 
   const {
     data = [],
@@ -41,6 +43,22 @@ export function Home() {
     };
   }, [isFetching]);
 
+  const create = trpc.feedback.create.useMutation({
+    onSuccess: (created) => {
+      utils.feedback.list.invalidate();
+
+      if (created?.id) {
+        navigate(`/feedback/${created.id}`);
+      }
+    },
+  });
+
+  const handleCreate = () => {
+    create.mutate({
+      title: "New feedback",
+      summary: "Write your feedback here…",
+    });
+  };
   if (isLoading) {
     return <div className="text-sm text-slate-600">Loading feedback…</div>;
   }
@@ -79,6 +97,8 @@ export function Home() {
         <button
           className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-brand-100"
           type="button"
+          onClick={handleCreate}
+            disabled={create.isPending}
         >
           <span className="text-base leading-none">＋</span>
           New feedback

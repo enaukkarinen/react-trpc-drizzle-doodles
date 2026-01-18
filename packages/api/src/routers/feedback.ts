@@ -36,6 +36,42 @@ export const feedbackRouter = router({
 
       return rows[0] ?? null;
     }),
+  create: publicProcedure
+    .input(
+      z.object({
+        title: z.string().min(1).max(120),
+        summary: z.string().min(1).max(2000),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const rows = await ctx.db
+        .insert(feedback)
+        .values({
+          title: input.title,
+          summary: input.summary,
+          // Use default values for status and createdAt
+        })
+        .returning();
+
+      return rows[0] ?? null;
+    }),
+
+  updateTitle: publicProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        title: z.string().min(1).max(120),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const rows = await ctx.db
+        .update(feedback)
+        .set({ title: input.title })
+        .where(eq(feedback.id, input.id))
+        .returning();
+
+      return rows[0] ?? null;
+    }),
   updateStatus: publicProcedure
     .input(
       z.object({
@@ -47,6 +83,22 @@ export const feedbackRouter = router({
       const rows = await ctx.db
         .update(feedback)
         .set({ status: input.status })
+        .where(eq(feedback.id, input.id))
+        .returning();
+
+      return rows[0] ?? null;
+    }),
+  updateSummary: publicProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        summary: z.string().min(1).max(2000),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const rows = await ctx.db
+        .update(feedback)
+        .set({ summary: input.summary })
         .where(eq(feedback.id, input.id))
         .returning();
 

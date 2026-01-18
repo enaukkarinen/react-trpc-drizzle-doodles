@@ -2,20 +2,24 @@ import { Link, useParams } from "react-router-dom";
 
 import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
+import { EditableTitle } from "../components/EditableTitle";
 import { formatDateTime } from "../utils/formatDateTime";
-
 import { getNextStatus } from "../utils/getNextStatus";
-import { useUpdateStatus } from "../hooks/useUpdateStatus";
+
+import { useUpdateSummary, useUpdateTitle, useUpdateStatus } from "../hooks";
+import { EditableSummary } from "../components/EditableSummary";
 
 export function FeedbackDetail() {
   const { id } = useParams<{ id: string }>();
 
-  const updateStatus = useUpdateStatus();
-  
   const { data } = trpc.feedback.byId.useQuery(
     { id: id ?? "" },
     { enabled: Boolean(id) },
   );
+
+  const updateStatus = useUpdateStatus();
+  const updateTitle = useUpdateTitle();
+  const updateSummary = useUpdateSummary();
 
   if (!id || !data) {
     return (
@@ -23,7 +27,8 @@ export function FeedbackDetail() {
         <Link className="text-sm text-brand-500 hover:underline" to="/">
           ← Back to feedback
         </Link>
-        <p className="text-sm text-slate-600">Not found.</p>
+
+        <p className="text-sm text-slate-600">Feedback not found.</p>
       </div>
     );
   }
@@ -37,44 +42,66 @@ export function FeedbackDetail() {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <header className="space-y-3">
         <Link className="text-sm text-brand-500 hover:underline" to="/">
           ← Back to feedback
         </Link>
 
         <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0 flex flex-wrap items-center gap-2">
-            <h1 className="truncate text-2xl font-semibold text-slate-900">
-              {data.title}
-            </h1>
+          {/* Left: title + status */}
+          <div className="min-w-0 space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <EditableTitle
+                value={data.title}
+                isSaving={updateTitle.isPending}
+                onSave={(next) =>
+                  updateTitle.mutate({ id: data.id, title: next })
+                }
+              />
 
-            <div className="group inline-flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleStatusClick}
-                disabled={updateStatus.isPending}
-                className="inline-flex cursor-pointer items-center rounded-full focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60 hover:ring-2 hover:ring-slate-300"
-                aria-label="Change status"
-                title="Click to change status"
-              >
-                <StatusPill status={data.status} />
-              </button>
+              <div className="group inline-flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleStatusClick}
+                  disabled={updateStatus.isPending}
+                  aria-label="Change status"
+                  title="Click to change status"
+                  className="
+                    inline-flex cursor-pointer items-center rounded-full p-0.5
+                    transition
+                    hover:ring-2 hover:ring-slate-300
+                    focus:outline-none focus:ring-4 focus:ring-brand-100
+                    disabled:cursor-not-allowed disabled:opacity-60
+                  "
+                >
+                  <StatusPill status={data.status} />
+                </button>
 
-              <span className="text-xs text-slate-400 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
-                Click to change
-              </span>
+                <span className="text-xs text-slate-400 sm:opacity-0 sm:transition sm:group-hover:opacity-100">
+                  Click to change
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="shrink-0 text-xs text-slate-500 mt-2">
+          {/* Right: created date */}
+          <div className="shrink-0 text-xs text-slate-500">
             {formatDateTime(data.createdAt)}
           </div>
         </div>
       </header>
 
+      {/* Content */}
       <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="px-4 py-4 whitespace-pre-wrap text-sm leading-6 text-slate-700">
-          {data.summary}
+        <div className="px-4 py-4">
+          <EditableSummary
+            value={data.summary}
+            isSaving={updateSummary.isPending}
+            onSave={(next) =>
+              updateSummary.mutate({ id: data.id, summary: next })
+            }
+          />
         </div>
       </section>
     </div>
