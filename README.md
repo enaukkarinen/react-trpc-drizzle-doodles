@@ -53,16 +53,6 @@ Open:
 - Web: [http://localhost:5173](http://localhost:5173)
 - API (tRPC): [http://localhost:3001/trpc](http://localhost:3001/trpc)
 
----
-
-## Useful scripts
-
-```bash
-pnpm dev         # start web + server
-pnpm db:migrate  # apply migrations (Drizzle)
-pnpm db:studio   # (optional) open Drizzle Studio
-pnpm db:reset    # (optional) wipe and re-migrate
-```
 
 ## Troubleshooting
 
