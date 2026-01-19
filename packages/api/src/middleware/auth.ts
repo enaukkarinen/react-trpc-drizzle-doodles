@@ -1,7 +1,6 @@
-import { initTRPC, TRPCError } from "@trpc/server";
-import type { Context } from "../context";
+import { TRPCError } from "@trpc/server";
 
-const t = initTRPC.context<Context>().create();
+import { t } from "../trpcBase";
 
 export const authMiddleware = t.middleware(({ ctx, next }) => {
   if (!ctx.user) {

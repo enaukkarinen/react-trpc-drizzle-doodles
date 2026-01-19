@@ -1,10 +1,6 @@
-import { initTRPC } from "@trpc/server";
-
-import { Context } from "./context";
 import { loggingMiddleware } from "./middleware/logging";
 import { authMiddleware } from "./middleware/auth";
-
-const t = initTRPC.context<Context>().create();
+import { t } from "./trpcBase";
 
 export const router = t.router;
 export const publicProcedure = t.procedure.use(loggingMiddleware);

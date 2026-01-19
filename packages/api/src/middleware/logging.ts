@@ -1,7 +1,4 @@
-import { initTRPC } from "@trpc/server";
-import type { Context } from "../context";
-
-const t = initTRPC.context<Context>().create();
+import { t } from "../trpcBase";
 
 const loggingEnabled = !!process.env.TRPC_LOGGING;
 
