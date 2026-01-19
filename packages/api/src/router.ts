@@ -1,8 +1,9 @@
+import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
 import { router } from "./trpc";
 import { feedbackRouter } from "./routers/feedback";
 import { healthRouter } from "./routers/health";
 import { authRouter } from "./routers/auth";
-import { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 export const appRouter = router({
   health: healthRouter,
