@@ -4,7 +4,7 @@ import cors from "cors";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "@einari/api";
 
-import { db } from "./db/client";
+import { createContext } from "./trpc/createContext";
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(
   "/trpc",
   createExpressMiddleware({
     router: appRouter,
-    createContext: ({ req, res }) => ({ db, req, res }),
+    createContext,
   }),
 );
 app.get("/health", (_req, res) => res.json({ ok: true }));
