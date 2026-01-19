@@ -53,7 +53,6 @@ Open:
 - Web: [http://localhost:5173](http://localhost:5173)
 - API (tRPC): [http://localhost:3001/trpc](http://localhost:3001/trpc)
 
-
 ## Troubleshooting
 
 ### Postgres auth errors on first run
@@ -66,14 +65,14 @@ If you see password authentication failed, check that no other Postgres containe
 
 ## Repo structure
 
-* apps/web/
-    * Vite + React UI
-    * Calls the API via tRPC + TanStack Query
-* apps/server/
-    * Express + tRPC server
-    * DB connection
-    * Drizzle migrations
-* packages/api/
-    * tRPC router, procedure & context definitions
-* packages/db/
-    * Drizzle schema and shared DB types 
+- apps/web/
+  - Vite + React UI
+  - Calls the API via tRPC + TanStack Query
+- apps/server/
+  - Express + tRPC server
+  - DB connection
+  - Drizzle migrations
+- packages/api/
+  - tRPC router, procedure & context definitions
+- packages/db/
+  - Drizzle schema and shared DB types

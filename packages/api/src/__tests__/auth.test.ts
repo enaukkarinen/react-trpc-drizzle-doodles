@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { appRouter } from "../router"; // wherever you export appRouter
+import { appRouter } from "../router";
 import { makeCtx } from "./helpers";
 
 describe("auth router", () => {
