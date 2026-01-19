@@ -29,11 +29,9 @@ cp env/server.env.example env/server.env
 Example `env/server.env.example`:
 
 ```bash
-# Postgres (Docker)
 DATABASE_URL=postgresql://feedback:feedback@localhost:5432/feedback
-
-# Server
 PORT=3001
+TRPC_LOGGING=true
 ```
 
 ### 4) Run database migrations

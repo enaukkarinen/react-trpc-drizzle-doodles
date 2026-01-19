@@ -9,4 +9,9 @@ export type SessionUser = {
 export type Context = {
   db: PostgresJsDatabase<typeof schema>;
   user: SessionUser | null;
+
+  req?: {
+    originalUrl?: string;
+    method?: string;
+  };
 };
