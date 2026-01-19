@@ -8,5 +8,6 @@ export async function createContext({ req }: CreateExpressContextOptions): Promi
   return {
     db,
     user: userId ? { id: userId } : null,
+    req
   };
 }

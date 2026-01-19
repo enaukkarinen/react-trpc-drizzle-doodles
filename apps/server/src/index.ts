@@ -8,7 +8,7 @@ import { createContext } from "./trpc/createContext";
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" /* Web App */ }));
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use(
   "/trpc",

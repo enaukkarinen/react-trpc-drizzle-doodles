@@ -1,14 +1,9 @@
-import { initTRPC, TRPCError } from "@trpc/server";
-
-import { Context } from "./context";
-
-const t = initTRPC.context<Context>().create();
+import { loggingMiddleware } from "./middleware/logging";
+import { authMiddleware } from "./middleware/auth";
+import { t } from "./trpcBase";
 
 export const router = t.router;
-export const publicProcedure = t.procedure;
-
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
-
-  return next({ ctx });
-});
+export const publicProcedure = t.procedure.use(loggingMiddleware);
+export const protectedProcedure = t.procedure
+  .use(loggingMiddleware)
+  .use(authMiddleware);

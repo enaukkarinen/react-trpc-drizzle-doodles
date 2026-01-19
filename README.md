@@ -18,22 +18,17 @@ pnpm install
 docker compose up -d
 ```
 
-### 3) Create server env file
+### 3) Create env files (2)
 
-Copy the example and adjust if needed:
+This project uses two separate env files:
+- one for the server runtime (Node, loaded via dotenv)
+- one for the web app (Vite, injected at build time)
 
-```bash
-cp env/server.env.example env/server.env
-```
-
-Example `env/server.env.example`:
+Copy the examples and adjust if needed:
 
 ```bash
-# Postgres (Docker)
-DATABASE_URL=postgresql://feedback:feedback@localhost:5432/feedback
-
-# Server
-PORT=3001
+cp apps/server/env/server.env.example apps/server/env/server.env
+cp apps/web/.env.example apps/web/.env
 ```
 
 ### 4) Run database migrations
