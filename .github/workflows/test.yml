@@ -1,29 +1,34 @@
-name: CI
+name: Tests
 
 on:
-    pull_request:
-        branches: [main]
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
 
-        strategy:
-            matrix:
-                node-version: [20.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+      # 1️⃣ Install pnpm FIRST
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
 
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: "pnpm"
+      # 2️⃣ Then setup Node with pnpm caching
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Run tests
-              run: pnpm test
+      - name: Run tests
+        run: pnpm test
