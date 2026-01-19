@@ -20,6 +20,10 @@ docker compose up -d
 
 ### 3) Create env files (2)
 
+This project uses two separate env files:
+- one for the server runtime (Node, loaded via dotenv)
+- one for the web app (Vite, injected at build time)
+
 Copy the examples and adjust if needed:
 
 ```bash
