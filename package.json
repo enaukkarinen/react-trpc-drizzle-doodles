@@ -7,8 +7,8 @@
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
-    "db:generate": "dotenv -e env/server.env -- drizzle-kit generate",
-    "db:migrate": "dotenv -e env/server.env -- drizzle-kit migrate"
+    "db:generate": "dotenv -e apps/server/env/server.env -- drizzle-kit generate",
+    "db:migrate": "dotenv -e apps/server/env/server.env -- drizzle-kit migrate"
   },
   "devDependencies": {
     "@types/node": "20.0.0",
