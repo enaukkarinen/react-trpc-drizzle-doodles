@@ -2,6 +2,10 @@ import { router } from "./trpc";
 import { feedbackRouter } from "./routers/feedback";
 import { healthRouter } from "./routers/health";
 import { authRouter } from "./routers/auth";
+import {
+  inferRouterInputs,
+  inferRouterOutputs,
+} from "@trpc/server/unstable-core-do-not-import";
 
 export const appRouter = router({
   health: healthRouter,
@@ -10,3 +14,5 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+export type RouterInputs = inferRouterInputs<AppRouter>;
+export type RouterOutputs = inferRouterOutputs<AppRouter>;

@@ -1,10 +1,4 @@
-type FeedbackItem = {
-  id: string;
-  title: string;
-  summary: string;
-  status: "open" | "planned" | "done";
-  createdAt: string;
-};
+import type { FeedbackItem } from "../types/FeedbackItem";
 
 export function StatusPill({ status }: { status: FeedbackItem["status"] }) {
   const base =
