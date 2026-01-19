@@ -75,4 +75,4 @@ If you see password authentication failed, check that no other Postgres containe
 - packages/api/
   - tRPC router, procedure & context definitions
 - packages/db/
-  - Drizzle schema and shared DB types
+  - Drizzle schema and shared DB types, and other domain defitions
