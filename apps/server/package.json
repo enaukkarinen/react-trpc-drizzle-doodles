@@ -11,6 +11,7 @@
   "dependencies": {
     "@einari/api": "workspace:*",
     "@einari/db": "workspace:^",
+    "@einari/db-client": "workspace:^",
     "@trpc/server": "^11.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

@@ -3,9 +3,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "@einari/db";
 
 const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL is not set");
-}
+if (!connectionString) throw new Error("DATABASE_URL is not set");
 
 const sql = postgres(connectionString, {
   max: 10,
@@ -13,3 +11,4 @@ const sql = postgres(connectionString, {
 });
 
 export const db = drizzle(sql, { schema });
+export type DbClient = typeof db;
