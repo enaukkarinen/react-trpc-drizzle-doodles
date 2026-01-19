@@ -14,9 +14,9 @@ const queryClient = new QueryClient();
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: "http://localhost:3001/trpc"
-    })
-  ]
+      url: import.meta.env.VITE_TRPC_URL,
+    }),
+  ],
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -28,5 +28,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );

@@ -18,20 +18,13 @@ pnpm install
 docker compose up -d
 ```
 
-### 3) Create server env file
+### 3) Create env files (2)
 
-Copy the example and adjust if needed:
-
-```bash
-cp env/server.env.example env/server.env
-```
-
-Example `env/server.env.example`:
+Copy the examples and adjust if needed:
 
 ```bash
-DATABASE_URL=postgresql://feedback:feedback@localhost:5432/feedback
-PORT=3001
-TRPC_LOGGING=true
+cp apps/server/env/server.env.example apps/server/env/server.env
+cp apps/web/.env.example apps/web/.env
 ```
 
 ### 4) Run database migrations
