@@ -69,17 +69,11 @@ If you see password authentication failed, check that no other Postgres containe
 * apps/web/
     * Vite + React UI
     * Calls the API via tRPC + TanStack Query
-    * Tailwind for styling
 * apps/server/
     * Express + tRPC server
-    * Owns DB connection + server runtime config (DATABASE_URL, PORT)
-    * Runs Drizzle migrations (migrations committed under apps/server/drizzle/)
+    * DB connection
+    * Drizzle migrations
 * packages/api/
-    * tRPC router/procedure definitions (feature routers mounted under appRouter
-    * Uses shared types/schema from @einari/db
+    * tRPC router, procedure & context definitions
 * packages/db/
-    * Drizzle schema and shared DB types (source of truth for enums like FeedbackStatus)
-    * Depends on drizzle-orm (and drizzle-orm/pg-core)
-* env/
-    * Local dev env files (e.g. env/server.env)
-    * env/server.env.example is committed; env/server.env is ignored
+    * Drizzle schema and shared DB types 
