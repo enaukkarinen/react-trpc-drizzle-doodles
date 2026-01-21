@@ -237,7 +237,7 @@ export function Chat() {
                         <details
                           key={`${t.name}-${idx}`}
                           className="rounded-lg border border-slate-200 bg-slate-50"
-                          open={idx === 0}
+                          open={true}
                         >
                           <summary className="cursor-pointer select-none px-3 py-2 text-xs font-medium text-slate-700">
                             Tool: <span className="font-mono">{t.name}</span>
