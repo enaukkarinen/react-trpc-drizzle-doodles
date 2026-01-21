@@ -7,7 +7,7 @@ import { trpc } from "../trpc";
 import { StatusPill } from "../components/StatusPill";
 import { formatDateTime } from "../utils/formatDateTime";
 
-export function Home() {
+export function HomePage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 100);
   const navigate = useNavigate();

@@ -1,8 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import { About } from "./pages/About";
-import { Home } from "./pages/Home";
-import { FeedbackDetail } from "./pages/FeedbackDetail";
+import { AboutPage } from "./pages/AboutPage";
+import { HomePage } from "./pages/HomePage";
+import { FeedbackDetailPage } from "./pages/FeedbackDetailPage";
+import { ChatPage } from "./pages/ChatPage";
+
 import { NavigationBar } from "./components/NavigationBar";
 
 export default function App() {
@@ -12,9 +14,11 @@ export default function App() {
 
       <main className="mx-auto max-w-5xl px-4 py-10">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/feedback/:id" element={<FeedbackDetail />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/feedback/:id" element={<FeedbackDetailPage />} />
+
+          <Route path="/chat" element={<ChatPage />} />
 
           {/* Redirects */}
           <Route path="/feedback" element={<Navigate to="/" replace />} />

@@ -11,7 +11,7 @@ import { EditableSummary } from "../components/EditableSummary";
 
 import { DeleteButton } from "../components/DeleteButton";
 
-export function FeedbackDetail() {
+export function FeedbackDetailPage() {
   const { id } = useParams<{ id: string }>();
 
   const { data } = trpc.feedback.byId.useQuery(

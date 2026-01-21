@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function About() {
+export function AboutPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
