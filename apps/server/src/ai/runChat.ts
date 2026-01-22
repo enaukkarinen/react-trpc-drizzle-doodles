@@ -2,11 +2,7 @@ import { ResponseFunctionToolCall, ResponseInputItem, ResponseOutputItem } from 
 import { openai, OPENAI_MODEL } from "./openaiClient.js";
 import { tools, runTool } from "./tools.js";
 
-export type ToolTrace = {
-  name: string;
-  args: any;
-  output: any;
-};
+import type { ToolTrace } from "@einari/api-contract";
 
 function buildInstructions(uiMode: "tool_cards_visible" | "normal") {
   return `

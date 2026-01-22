@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@einari/api": "workspace:*",
+    "@einari/api-contract": "workspace:^",
     "@einari/db": "workspace:^",
     "@einari/db-client": "workspace:^",
     "@modelcontextprotocol/sdk": "^1.0.0",

@@ -58,6 +58,9 @@ importers:
       '@einari/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@einari/api-contract':
+        specifier: workspace:^
+        version: link:../../packages/api-contract
       '@einari/db':
         specifier: workspace:^
         version: link:../../packages/db
@@ -113,6 +116,9 @@ importers:
       '@einari/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@einari/api-contract':
+        specifier: workspace:^
+        version: link:../../packages/api-contract
       '@einari/db':
         specifier: workspace:^
         version: link:../../packages/db
@@ -193,6 +199,12 @@ importers:
       vitest:
         specifier: ^4.0.17
         version: 4.0.17(@types/node@20.0.0)(jiti@1.21.7)(tsx@4.21.0)
+
+  packages/api-contract:
+    dependencies:
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
 
   packages/db:
     dependencies:

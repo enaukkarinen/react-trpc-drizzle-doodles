@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@einari/api": "workspace:*",
+    "@einari/api-contract": "workspace:^",
     "@einari/db": "workspace:^",
     "@tanstack/react-query": "^5.59.0",
     "@trpc/client": "^11.0.0",
