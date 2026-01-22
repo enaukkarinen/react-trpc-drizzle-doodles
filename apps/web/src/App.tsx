@@ -3,9 +3,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { AboutPage } from "./pages/AboutPage";
 import { HomePage } from "./pages/HomePage";
 import { FeedbackDetailPage } from "./pages/FeedbackDetailPage";
-import { ChatPage } from "./pages/ChatPage";
 
 import { NavigationBar } from "./components/NavigationBar";
+import { lazy, Suspense } from "react";
+
+const ChatPage = lazy(() => import("./features/chat/pages/ChatPage"));
 
 export default function App() {
   return (
@@ -18,7 +20,14 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/feedback/:id" element={<FeedbackDetailPage />} />
 
-          <Route path="/chat" element={<ChatPage />} />
+          <Route
+            path="/chat"
+            element={
+              <Suspense fallback={<div>Loading chat…</div>}>
+                <ChatPage />
+              </Suspense>
+            }
+          />
 
           {/* Redirects */}
           <Route path="/feedback" element={<Navigate to="/" replace />} />

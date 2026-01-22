@@ -1,0 +1,166 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { SendHorizonal } from "lucide-react";
+
+import { formatDateTime } from "../../../utils/formatDateTime";
+import { postChat } from "../lib/chatApi";
+import type { Msg } from "../lib/types";
+import { ToolTracePanel } from "./ToolTracePanel";
+import type { ToolTrace } from "@einari/api-contract";
+
+function uid() {
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
+
+function makeAssistant(text: string, data?: ToolTrace[]): Msg {
+  return { id: uid(), role: "assistant", text, data, createdAt: new Date() };
+}
+
+function makeUser(text: string): Msg {
+  return { id: uid(), role: "user", text, createdAt: new Date() };
+}
+
+export function Chat() {
+  const [messages, setMessages] = useState<Msg[]>(() => [
+    makeAssistant('Try: "recent", "open", "stats", "search navigation", or "get <id>".'),
+  ]);
+
+  const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  const quickActions = useMemo(() => ["recent", "open", "stats", "search keyboard", "search navigation"], []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages.length, isSending]);
+
+  async function send(raw: string) {
+    const message = raw.trim();
+    if (!message || isSending) return;
+
+    setError(null);
+    setIsSending(true);
+
+    setMessages((m) => [...m, makeUser(message)]);
+    setInput("");
+
+    try {
+      const { reply, data } = await postChat(message);
+      setMessages((m) => [...m, makeAssistant(reply, data)]);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Network error";
+      setError(msg);
+      setMessages((m) => [...m, makeAssistant(`Sorry — ${msg}`)]);
+    } finally {
+      setIsSending(false);
+    }
+  }
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      void send(input);
+    }
+  }
+
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
+      {/* Header strip */}
+      <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-b from-slate-900 to-slate-800 px-4 py-2">
+        <div className="text-xs font-medium uppercase tracking-wide text-slate-200">Chat</div>
+        <div className="text-xs text-slate-400">{messages.length} messages</div>
+      </div>
+
+      {/* Quick actions */}
+      <div className="border-b border-slate-100 bg-slate-50 px-4 py-3">
+        <div className="flex flex-wrap gap-2">
+          {quickActions.map((a) => (
+            <button
+              key={a}
+              type="button"
+              disabled={isSending}
+              onClick={() => void send(a)}
+              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-60"
+            >
+              {a}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="h-[420px] overflow-y-auto">
+        <ul className="divide-y divide-slate-100">
+          {messages.map((m) => (
+            <li key={m.id} className="px-4 py-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    {m.role === "assistant" ? (
+                      <div className="truncate text-sm font-semibold text-brand-500">Assistant</div>
+                    ) : (
+                      <div className="truncate text-sm font-semibold text-slate-900">You</div>
+                    )}
+
+                    {isSending && m.role === "assistant" ? (
+                      <span className="rounded-full bg-slate-900/70 px-2 py-0.5 text-xs font-medium text-brand-200 ring-1 ring-white/10">
+                        Thinking…
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700">{m.text}</p>
+
+                  {Array.isArray(m.data) && m.data.length ? (
+                    <div className="mt-3 space-y-3">
+                      {m.data.map((t, idx) => (
+                        <ToolTracePanel
+                          key={`${t.name}-${idx}`}
+                          trace={t}
+                          open={true}
+                          onGet={(id) => void send(`get ${id}`)}
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="shrink-0 text-xs text-slate-500">{formatDateTime(m.createdAt)}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Error banner */}
+      {error ? <div className="border-t border-slate-100 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+
+      {/* Input */}
+      <div className="flex flex-col gap-3 border-t border-slate-100 bg-white px-4 py-4 sm:flex-row sm:items-end">
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={onKeyDown}
+          placeholder="Ask something…"
+          rows={2}
+          disabled={isSending}
+          className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-brand-300 focus:ring-4 focus:ring-brand-100 disabled:opacity-60"
+        />
+
+        <button
+          type="button"
+          onClick={() => void send(input)}
+          disabled={isSending || !input.trim()}
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-4 focus:ring-brand-100 disabled:opacity-60"
+        >
+          <SendHorizonal className="h-4 w-4 text-slate-300" />
+          Send
+        </button>
+      </div>
+    </section>
+  );
+}
