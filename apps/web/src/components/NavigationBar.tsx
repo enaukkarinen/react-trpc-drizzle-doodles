@@ -4,6 +4,7 @@ export function NavigationBar() {
   const pages = [
     { name: "Home", to: "/" },
     { name: "About", to: "/about" },
+    { name: "Chat", to: "/chat" },
   ];
 
   return (

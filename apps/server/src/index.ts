@@ -6,9 +6,13 @@ import { appRouter } from "@einari/api";
 
 import { createContext } from "./trpc/createContext";
 
+import { chatRouter } from "./routes/chat";
+
 const app = express();
 
 app.use(cors({ origin: "http://localhost:5173" }));
+
+app.use("/api", chatRouter);
 
 app.use(
   "/trpc",
