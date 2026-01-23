@@ -11,7 +11,7 @@ export function registerFeedbackGetTool(mcp: McpServer) {
     {
       description:
         "Get a single feedback item by its id. Use after you already have an id (e.g. from feedback_list). Read-only.",
-      inputSchema: { id: z.string().min(1) },
+      inputSchema: z.object({ id: z.string().min(1) }),
     },
     async ({ id }) => {
       const rows = await db

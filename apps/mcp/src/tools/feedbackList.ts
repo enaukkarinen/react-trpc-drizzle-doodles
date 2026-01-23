@@ -9,14 +9,13 @@ export function registerFeedbackListTool(mcp: McpServer) {
   mcp.registerTool(
     "feedback_list",
     {
-      description:
-        "List feedback items (newest first) with optional status filter and text search. Read-only.",
-      inputSchema: {
+      description: "List feedback items (newest first) with optional status filter and text search. Read-only.",
+      inputSchema: z.object({
         limit: z.number().int().min(1).max(50).default(20),
         offset: z.number().int().min(0).default(0),
         status: z.enum(FEEDBACK_STATUSES).optional(),
         query: z.string().min(1).max(200).optional(),
-      },
+      }),
     },
     async ({ limit, offset, status, query }: any) => {
       const where = and(
@@ -41,11 +40,7 @@ export function registerFeedbackListTool(mcp: McpServer) {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              { count: rows.length, limit, offset, items: rows },
-              null,
-              2,
-            ),
+            text: JSON.stringify({ count: rows.length, limit, offset, items: rows }, null, 2),
           },
         ],
       };
