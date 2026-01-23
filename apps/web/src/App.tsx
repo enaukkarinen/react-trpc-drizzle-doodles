@@ -8,6 +8,7 @@ import { NavigationBar } from "./components/NavigationBar";
 import { lazy, Suspense } from "react";
 
 const ChatPage = lazy(() => import("./features/chat/pages/ChatPage"));
+const MapPage = lazy(() => import("./features/map/pages/MapPage"));
 
 export default function App() {
   return (
@@ -25,6 +26,14 @@ export default function App() {
             element={
               <Suspense fallback={<div>Loading chat…</div>}>
                 <ChatPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/map"
+            element={
+              <Suspense fallback={<div>Loading map…</div>}>
+                <MapPage />
               </Suspense>
             }
           />
