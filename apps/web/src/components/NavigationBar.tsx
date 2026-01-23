@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 export function NavigationBar() {
   const pages = [
     { name: "Home", to: "/" },
-    { name: "About", to: "/about" },
     { name: "Chat", to: "/chat" },
     { name: "Map", to: "/map" },
+    { name: "About", to: "/about" },
   ];
 
   return (
