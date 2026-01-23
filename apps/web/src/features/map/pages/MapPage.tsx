@@ -21,31 +21,21 @@ export default function MapPage() {
     return [
       new MVTLayer({
         id: "lad-mvt",
-        data: "/tiles/lad/{z}/{x}/{y}.pbf", // if you use Vite proxy to server
-        // or: "http://localhost:3000/tiles/lad/{z}/{x}/{y}.pbf"
-
+        data: "/tiles/lad/{z}/{x}/{y}.pbf",
         minZoom: 0,
         maxZoom: 12,
-
         pickable: true,
         filled: true,
         stroked: true,
-
-        // Simple styling for now
         getFillColor: [20, 80, 200, 50],
         getLineColor: [15, 23, 42, 140],
         lineWidthUnits: "pixels",
         getLineWidth: 1,
-
         autoHighlight: true,
         highlightColor: [255, 255, 255, 80],
-
         onHover: (info: PickingInfo) => {
           const obj: any = info.object;
           if (!info.picked || !obj) return setHover(null);
-
-          // geojson-vt generates properties a bit differently sometimes;
-          // but usually original feature properties are preserved.
           setHover({
             x: info.x ?? 0,
             y: info.y ?? 0,
