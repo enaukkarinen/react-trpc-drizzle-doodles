@@ -15,7 +15,7 @@ export type ToolTrace = z.infer<typeof ToolTraceSchema>;
  * POST /api/chat request body
  */
 export const ChatRequestSchema = z.object({
-  input: z.string().min(1),
+  message: z.string().min(1),
 });
 
 export type ChatRequest = z.infer<typeof ChatRequestSchema>;

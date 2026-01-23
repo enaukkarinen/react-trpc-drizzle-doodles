@@ -1,26 +1,20 @@
 import express, { Router } from "express";
 import { runChat } from "../ai/runChat.js";
-import { ChatResponseSchema } from "@einari/api-contract";
+import { ChatRequest, ChatRequestSchema } from "@einari/api-contract";
+
+import { validateBody } from "../middleware/validateBody.js";
 
 export const chatRouter = Router();
 chatRouter.use(express.json());
 
-chatRouter.post("/chat", async (req, res) => {
-  const message = String(req.body?.message ?? "").trim();
-  if (!message) return res.status(400).json({ error: "message is required" });
-
+chatRouter.post<{}, any, ChatRequest>("/chat", validateBody(ChatRequestSchema), async (req, res) => {
   try {
-    const { reply, traces } = await runChat(message);
+    const { reply, traces } = await runChat(req.body.message);
 
     const payload = {
       reply,
       data: traces.length ? traces : undefined,
     };
-
-    ChatResponseSchema.parse({
-      reply: payload.reply,
-      data: payload.data ?? [],
-    });
 
     return res.json(payload);
   } catch (err) {

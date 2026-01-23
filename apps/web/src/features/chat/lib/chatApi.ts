@@ -1,10 +1,11 @@
-import { ChatResponseSchema, type ChatResponse } from "@einari/api-contract";
+import { ChatRequestSchema, ChatResponseSchema, type ChatResponse } from "@einari/api-contract";
 
 export async function postChat(message: string): Promise<ChatResponse> {
+  const body = ChatRequestSchema.parse({ message });
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ message }),
+    body: JSON.stringify(body),
   });
 
   const json = await res.json().catch(() => ({}));
@@ -15,6 +16,5 @@ export async function postChat(message: string): Promise<ChatResponse> {
     throw new Error(String(errMsg));
   }
 
-  // Just for contract drift visibility.
   return ChatResponseSchema.parse(json);
 }

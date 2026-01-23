@@ -9,12 +9,11 @@ export function registerFeedbackRecentTool(mcp: McpServer) {
   mcp.registerTool(
     "feedback_recent",
     {
-      description:
-        "Get the most recent feedback items (newest first). Optional status filter. Read-only.",
-      inputSchema: {
+      description: "Get the most recent feedback items (newest first). Optional status filter. Read-only.",
+      inputSchema: z.object({
         limit: z.number().int().min(1).max(50).default(10),
         status: z.enum(FEEDBACK_STATUSES).optional(),
-      },
+      }),
     },
     async ({ limit, status }) => {
       const where = status ? eq(feedback.status, status) : undefined;
@@ -35,11 +34,7 @@ export function registerFeedbackRecentTool(mcp: McpServer) {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              { count: rows.length, limit, items: rows },
-              null,
-              2,
-            ),
+            text: JSON.stringify({ count: rows.length, limit, items: rows }, null, 2),
           },
         ],
       };
