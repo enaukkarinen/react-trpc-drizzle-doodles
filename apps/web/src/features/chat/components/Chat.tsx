@@ -67,13 +67,11 @@ export function Chat() {
 
   return (
     <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-      {/* Header strip */}
       <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-b from-slate-900 to-slate-800 px-4 py-2">
         <div className="text-xs font-medium uppercase tracking-wide text-slate-200">Chat</div>
         <div className="text-xs text-slate-400">{messages.length} messages</div>
       </div>
 
-      {/* Quick actions */}
       <div className="border-b border-slate-100 bg-slate-50 px-4 py-3">
         <div className="flex flex-wrap gap-2">
           {quickActions.map((a) => (
@@ -90,7 +88,6 @@ export function Chat() {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="h-[420px] overflow-y-auto">
         <ul className="divide-y divide-slate-100">
           {messages.map((m) => (
@@ -136,10 +133,8 @@ export function Chat() {
         <div ref={bottomRef} />
       </div>
 
-      {/* Error banner */}
       {error ? <div className="border-t border-slate-100 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
 
-      {/* Input */}
       <div className="flex flex-col gap-3 border-t border-slate-100 bg-white px-4 py-4 sm:flex-row sm:items-end">
         <textarea
           value={input}

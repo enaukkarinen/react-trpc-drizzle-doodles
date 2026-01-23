@@ -24,18 +24,9 @@ async function connectOnce(): Promise<Client> {
 export async function getMcpClient(): Promise<Client> {
   if (!clientPromise) {
     clientPromise = connectOnce().catch((err) => {
-      // If connect fails, allow retry next time
       clientPromise = null;
       throw err;
     });
   }
   return clientPromise;
-}
-
-/**
- * Use this if a request fails with "already initialized" or session errors:
- * it will force a fresh client/transport on the next call.
- */
-export function resetMcpClient() {
-  clientPromise = null;
 }

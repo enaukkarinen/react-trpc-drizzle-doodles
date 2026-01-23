@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 /**
- * Tool traces returned by your /api/chat endpoint for UI rendering.
- * Keep args/output as unknown because tools can evolve independently.
+ * Tool traces returned by /api/chat.
  */
 export const ToolTraceSchema = z.object({
   name: z.string(),

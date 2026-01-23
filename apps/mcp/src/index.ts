@@ -23,17 +23,13 @@ const app = express();
  * StreamableHTTPServerTransport reads the raw request stream.
  */
 
-/* -------- auth helper -------- */
-
 function requireAuth(req: express.Request, res: express.Response): boolean {
   if (!MCP_AUTH_TOKEN) return true; // auth disabled in dev
 
   const auth = (req.header("authorization") ?? "").trim();
 
   // bearer prefix optional
-  const token = auth.toLowerCase().startsWith("bearer ")
-    ? auth.slice(7).trim()
-    : auth;
+  const token = auth.toLowerCase().startsWith("bearer ") ? auth.slice(7).trim() : auth;
 
   if (token === MCP_AUTH_TOKEN) return true;
 
@@ -41,12 +37,6 @@ function requireAuth(req: express.Request, res: express.Response): boolean {
   return false;
 }
 
-/* ------------------ Transport ------------------ */
-
-/**
- * ONE transport instance per server.
- * The transport manages sessions internally.
- */
 const transport = new StreamableHTTPServerTransport({
   sessionIdGenerator: () => randomUUID(),
 });

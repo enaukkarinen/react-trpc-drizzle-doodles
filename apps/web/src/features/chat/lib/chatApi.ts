@@ -15,6 +15,6 @@ export async function postChat(message: string): Promise<ChatResponse> {
     throw new Error(String(errMsg));
   }
 
-  // Optional but nice: runtime validation so contract drift is caught instantly.
+  // Just for contract drift visibility.
   return ChatResponseSchema.parse(json);
 }
