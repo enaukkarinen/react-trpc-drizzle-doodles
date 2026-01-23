@@ -24,8 +24,6 @@ tilesRouter.get("/lad/:z/:x/:y.pbf", (req, res) => {
     const acceptEncoding = String(req.headers["accept-encoding"] ?? "");
     const acceptsGzip = acceptEncoding.includes("gzip");
 
-    // We gzip tiles ourselves. If you later add app.use(compression()),
-    // remove this block to avoid double-compression.
     if (acceptsGzip) {
       res.setHeader("Content-Encoding", "gzip");
       return res.status(200).send(gzipSync(new Uint8Array(pbf)));
