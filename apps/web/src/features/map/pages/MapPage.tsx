@@ -28,6 +28,15 @@ export default function MapPage() {
     return [createLadLayer({ selectedKey, setHover, setSelected })];
   }, [selectedKey]);
 
+  function onAskChat() {
+    const district = selected?.name ?? "";
+    const ref = selected?.reference ?? "";
+    const qs = new URLSearchParams();
+    if (district) qs.set("district", district);
+    if (ref) qs.set("ref", ref);
+    navigate(`/chat?${qs.toString()}`);
+  }
+
   return (
     <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="flex items-center justify-between rounded-t-xl bg-gradient-to-b from-slate-900 to-slate-800 px-4 py-2">
@@ -55,14 +64,7 @@ export default function MapPage() {
         <DistrictDetailsPanel
           selected={selected}
           onClear={() => setSelected(null)}
-          onAskChat={() => {
-            const district = selected?.name ?? "";
-            const ref = selected?.reference ?? "";
-            const qs = new URLSearchParams();
-            if (district) qs.set("district", district);
-            if (ref) qs.set("ref", ref);
-            navigate(`/chat?${qs.toString()}`);
-          }}
+          onAskChat={onAskChat}
           onCopyReference={() => {
             if (selected?.reference) navigator.clipboard.writeText(selected.reference);
           }}
