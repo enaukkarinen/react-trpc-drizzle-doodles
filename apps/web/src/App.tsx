@@ -6,8 +6,10 @@ import { FeedbackDetailPage } from "./pages/FeedbackDetailPage";
 
 import { NavigationBar } from "./components/NavigationBar";
 import { lazy, Suspense } from "react";
+import MapPage from "./features/map/pages/MapPage";
 
 const ChatPage = lazy(() => import("./features/chat/pages/ChatPage"));
+// const MapPage = lazy(() => import("./features/map/pages/MapPage"));
 
 export default function App() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
               </Suspense>
             }
           />
+
+          <Route path="/map" element={<MapPage />} />
 
           {/* Redirects */}
           <Route path="/feedback" element={<Navigate to="/" replace />} />

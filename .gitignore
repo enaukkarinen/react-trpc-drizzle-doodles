@@ -12,3 +12,5 @@ apps/mcp/env/mcp.env
 apps/mcp/build/
 
 .drizzle/
+
+apps/server/static/*.geojson

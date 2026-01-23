@@ -5,6 +5,7 @@ export function NavigationBar() {
     { name: "Home", to: "/" },
     { name: "About", to: "/about" },
     { name: "Chat", to: "/chat" },
+    { name: "Map", to: "/map" },
   ];
 
   return (
