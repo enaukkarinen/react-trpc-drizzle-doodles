@@ -1,7 +1,7 @@
-import { ChatRequestSchema, ChatResponseSchema, type ChatResponse } from "@einari/api-contract";
+import { ChatRequestSchema, ChatResponseSchema, type ChatRequest, type ChatResponse } from "@einari/api-contract";
 
-export async function postChat(message: string): Promise<ChatResponse> {
-  const body = ChatRequestSchema.parse({ message });
+export async function postChat(request: ChatRequest): Promise<ChatResponse> {
+  const body = ChatRequestSchema.parse(request);
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "content-type": "application/json" },

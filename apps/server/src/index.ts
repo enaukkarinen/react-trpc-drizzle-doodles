@@ -8,7 +8,9 @@ import { createContext } from "./trpc/createContext";
 
 import { chatRouter } from "./routes/chat";
 import { tilesRouter } from "./routes/tiles";
-import { initLadTileIndex } from "./tiles/datasets/lad/ladIndex";
+import { initLadTileIndex } from "./services/tiles/datasets/lad/ladIndex";
+import { tilesLadRouter } from "./routes/tilesLad";
+
 const app = express();
 
 app.use(cors({ origin: "http://localhost:5173" }));
@@ -17,6 +19,8 @@ app.use("/api", chatRouter);
 
 await initLadTileIndex();
 app.use("/tiles", tilesRouter);
+
+app.use("/tiles2", tilesLadRouter);
 
 app.use(
   "/trpc",

@@ -2,19 +2,22 @@
   "name": "feedback-doodles",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev": "pnpm -r dev",
+    "dev": "pnpm -r --stream --reporter append-only dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "db:generate": "dotenv -e apps/server/env/server.env -- drizzle-kit generate",
-    "db:migrate": "dotenv -e apps/server/env/server.env -- drizzle-kit migrate"
+    "db:migrate": "dotenv -e apps/server/env/server.env -- drizzle-kit migrate",
+    "db:populate": "dotenv -e apps/server/env/server.env -- tsx apps/server/scripts/import-lad-geojson.ts"
   },
   "devDependencies": {
     "@types/node": "20.0.0",
-    "dotenv-cli": "^11.0.0"
+    "dotenv-cli": "^11.0.0",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
-    "drizzle-kit": "^0.31.8"
+    "drizzle-kit": "^0.31.8",
+    "vite": "^5.4.0"
   }
 }

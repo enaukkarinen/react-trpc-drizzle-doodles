@@ -12,7 +12,7 @@ export function createLadLayer(opts: {
 
   return new MVTLayer({
     id: "lad-mvt",
-    data: "/tiles/lad/{z}/{x}/{y}.pbf",
+    data: "/tiles2/lad/{z}/{x}/{y}.pbf",
     minZoom: 0,
     maxZoom: 12,
 

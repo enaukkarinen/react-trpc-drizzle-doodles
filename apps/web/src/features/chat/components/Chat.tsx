@@ -5,7 +5,8 @@ import { formatDateTime } from "../../../utils/formatDateTime";
 import { postChat } from "../lib/chatApi";
 import type { Msg } from "../lib/types";
 import { ToolTracePanel } from "./ToolTracePanel";
-import type { ToolTrace } from "@einari/api-contract";
+import type { ChatContext, ToolTrace } from "@einari/api-contract";
+import { useSearchParams } from "react-router-dom";
 
 function uid() {
   return Math.random().toString(16).slice(2) + Date.now().toString(16);
@@ -20,9 +21,38 @@ function makeUser(text: string): Msg {
 }
 
 export function Chat() {
-  const [messages, setMessages] = useState<Msg[]>(() => [
-    makeAssistant('Try: "recent", "open", "stats", "search navigation", or "get <id>".'),
-  ]);
+  const [searchParams] = useSearchParams();
+  const ref = searchParams.get("ref") ?? "";
+  const district = searchParams.get("district") ?? undefined;
+
+  const context: ChatContext = useMemo(() => {
+    if (ref) {
+      return {
+        type: "lad",
+        ref,
+        district: district,
+      };
+    } else {
+      return { type: "none" };
+    }
+  }, [ref, district]);
+
+  const initialMessages = useMemo<Msg[]>(() => {
+    if (context.type === "lad") {
+      return [
+        makeAssistant(
+          `You're looking at ${context.district ?? "this district"} (${context.ref}).\n\n` +
+            `You can ask things like:\n` +
+            `• "Summarise this district"\n` +
+            `• "What are the recent feedback items for this district?"\n`,
+        ),
+      ];
+    }
+
+    return [makeAssistant('Try: "recent", "open", "stats", "search navigation", or "get <id>".')];
+  }, [context]);
+
+  const [messages, setMessages] = useState<Msg[]>(initialMessages);
 
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -30,7 +60,7 @@ export function Chat() {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  const quickActions = useMemo(() => ["recent", "open", "stats", "search keyboard", "search navigation"], []);
+  const quickActions = useMemo(() => ["recent", "open", "stats"], []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,7 +77,7 @@ export function Chat() {
     setInput("");
 
     try {
-      const { reply, data } = await postChat(message);
+      const { reply, data } = await postChat({ message, context });
       setMessages((m) => [...m, makeAssistant(reply, data)]);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Network error";
@@ -71,6 +101,13 @@ export function Chat() {
         <div className="text-xs font-medium uppercase tracking-wide text-slate-200">Chat</div>
         <div className="text-xs text-slate-400">{messages.length} messages</div>
       </div>
+
+      {context.type === "lad" ? (
+        <div className="mt-2 text-xs text-slate-600">
+          Context: <span className="font-medium">{context.district ?? "Selected district"}</span>{" "}
+          <span className="text-slate-400">({context.ref})</span>
+        </div>
+      ) : null}
 
       <div className="border-b border-slate-100 bg-slate-50 px-4 py-3">
         <div className="flex flex-wrap gap-2">

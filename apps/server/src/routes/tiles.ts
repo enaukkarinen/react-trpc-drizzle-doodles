@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { getLadTilePbf } from "../tiles/datasets/lad/ladIndex";
+import { getLadTilePbf } from "../services/tiles/datasets/lad/ladIndex";
 import { gzipSync } from "node:zlib";
 
 export const tilesRouter = Router();
 
-// /tiles/lad/6/32/21.pbf
 tilesRouter.get("/lad/:z/:x/:y.pbf", (req, res) => {
   const z = Number(req.params.z);
   const x = Number(req.params.x);

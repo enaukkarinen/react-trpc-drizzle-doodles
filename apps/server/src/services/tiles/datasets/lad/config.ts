@@ -6,4 +6,4 @@ export const LAD_GEOJSON_URL = "https://files.planning.data.gov.uk/dataset/local
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const LAD_GEOJSON_PATH = path.resolve(__dirname, "../../../../static/local-authority-district.geojson");
+export const LAD_GEOJSON_PATH = path.resolve(__dirname, "../../../../../static/local-authority-district.geojson");
