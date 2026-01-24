@@ -44,7 +44,7 @@ const errMsg = (e: unknown) => {
   return msg.length > 160 ? msg.slice(0, 160) + "…" : msg;
 };
 
-const upsert = (values: any) => sql`
+const insert = (values: any) => sql`
   INSERT INTO ${lad} (
     reference, name, entity, dataset, quality,
     entry_date, start_date, end_date, geom
@@ -100,13 +100,13 @@ async function main() {
   for (let i = 0; i < rows.length; i += BATCH) {
     const batch = rows.slice(i, i + BATCH);
     try {
-      await db.execute(upsert(valuesOf(batch)));
+      await db.execute(insert(valuesOf(batch)));
       ok += batch.length;
     } catch (e) {
       console.error(`[import] batch ${i / BATCH + 1} failed: ${errMsg(e)} (fallback row-by-row)`);
       for (const r of batch) {
         try {
-          await db.execute(upsert(valuesOf([r])));
+          await db.execute(insert(valuesOf([r])));
           ok++;
         } catch (e2) {
           fail++;
