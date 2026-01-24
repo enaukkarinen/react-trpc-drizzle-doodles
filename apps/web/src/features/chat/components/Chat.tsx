@@ -20,39 +20,75 @@ function makeUser(text: string): Msg {
   return { id: uid(), role: "user", text, createdAt: new Date() };
 }
 
+const LAD_QUICK_ACTIONS = [
+  {
+    key: "lad_summary",
+    label: "Summarise (facts)",
+    text: "Summarise this district with official name, dates (if present), area (km²), and bbox. Use lad_by_ref.",
+  },
+  {
+    key: "lad_size",
+    label: "How big is it?",
+    text: "How large is this district? Use lad_by_ref and report areaKm2.",
+  },
+  {
+    key: "lad_bbox",
+    label: "Bounding box",
+    text: "What is the bounding box for this district? Use lad_by_ref and return min/max lon/lat.",
+  },
+  {
+    key: "lad_wired_in",
+    label: "What data is wired in?",
+    text: "What LAD data is available in this demo, and what isn't wired in yet?",
+  },
+] as const;
+
+const GENERIC_QUICK_ACTIONS = [
+  { key: "recent", label: "recent", text: "recent" },
+  { key: "open", label: "open", text: "open" },
+  { key: "stats", label: "stats", text: "stats" },
+] as const;
+
+function initialAssistantForContext(context: ChatContext): Msg[] {
+  if (context.type === "lad") {
+    const label = context.uiLabel ?? "Selected district (UI label)";
+    return [
+      makeAssistant(
+        `You’re looking at ${label}.\n` +
+          `Reference (authoritative): ${context.ref}\n\n` +
+          `Try one of these:\n` +
+          `• “Summarise this district (facts)”\n` +
+          `• “How big is it?”\n` +
+          `• “What data is wired in?”\n`,
+      ),
+    ];
+  }
+
+  return [makeAssistant('Try: "recent", "open", "stats", "search navigation", or "get <id>".')];
+}
+
 export function Chat() {
   const [searchParams] = useSearchParams();
+
+  // Prefer `label` (new), but accept `district` (old) for compatibility.
   const ref = searchParams.get("ref") ?? "";
-  const district = searchParams.get("district") ?? undefined;
+  const uiLabel = searchParams.get("label") ?? searchParams.get("district") ?? undefined;
+
+  // Optional: if you want auto-send when opened from map
+  const autoStart = searchParams.get("autostart") === "1";
 
   const context: ChatContext = useMemo(() => {
     if (ref) {
       return {
         type: "lad",
         ref,
-        district: district,
+        uiLabel: uiLabel || undefined,
       };
-    } else {
-      return { type: "none" };
     }
-  }, [ref, district]);
+    return { type: "none" };
+  }, [ref, uiLabel]);
 
-  const initialMessages = useMemo<Msg[]>(() => {
-    if (context.type === "lad") {
-      return [
-        makeAssistant(
-          `You're looking at ${context.district ?? "this district"} (${context.ref}).\n\n` +
-            `You can ask things like:\n` +
-            `• "Summarise this district"\n` +
-            `• "What are the recent feedback items for this district?"\n`,
-        ),
-      ];
-    }
-
-    return [makeAssistant('Try: "recent", "open", "stats", "search navigation", or "get <id>".')];
-  }, [context]);
-
-  const [messages, setMessages] = useState<Msg[]>(initialMessages);
+  const [messages, setMessages] = useState<Msg[]>(() => initialAssistantForContext(context));
 
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -60,7 +96,36 @@ export function Chat() {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  const quickActions = useMemo(() => ["recent", "open", "stats"], []);
+  // Context-aware quick actions
+  const quickActions = useMemo(() => {
+    return context.type === "lad" ? LAD_QUICK_ACTIONS : GENERIC_QUICK_ACTIONS;
+  }, [context.type]);
+
+  // IMPORTANT: reset initial assistant message when context changes (e.g. user clicks a different district)
+  useEffect(() => {
+    setMessages(initialAssistantForContext(context));
+    setError(null);
+    setInput("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.type, context.type === "lad" ? context.ref : "none"]);
+
+  // Optional: auto-start a “facts” question when opened from the map
+  useEffect(() => {
+    if (!autoStart) return;
+    if (context.type !== "lad") return;
+
+    // only auto-send if the chat is “fresh”
+    setMessages((m) => {
+      if (m.length > 1) return m;
+      return m;
+    });
+
+    // fire-and-forget; we purposely don't block UI
+    void send(
+      "Give me a quick factual summary of this district: official name, dates (if present), area (km²), and bbox. Use lad_by_ref.",
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStart, context.type, context.type === "lad" ? context.ref : "none"]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -77,6 +142,8 @@ export function Chat() {
     setInput("");
 
     try {
+      // If you later add uiMode, you can send it here too:
+      // const { reply, data } = await postChat({ message, context, uiMode: "tool_cards_visible" });
       const { reply, data } = await postChat({ message, context });
       setMessages((m) => [...m, makeAssistant(reply, data)]);
     } catch (e: unknown) {
@@ -103,9 +170,9 @@ export function Chat() {
       </div>
 
       {context.type === "lad" ? (
-        <div className="mt-2 text-xs text-slate-600">
-          Context: <span className="font-medium">{context.district ?? "Selected district"}</span>{" "}
-          <span className="text-slate-400">({context.ref})</span>
+        <div className="mt-2 px-4 text-xs text-slate-600">
+          Context: <span className="font-medium">{context.uiLabel ?? "Selected district"}</span>{" "}
+          <span className="text-slate-400">• Ref: {context.ref}</span>
         </div>
       ) : null}
 
@@ -113,13 +180,14 @@ export function Chat() {
         <div className="flex flex-wrap gap-2">
           {quickActions.map((a) => (
             <button
-              key={a}
+              key={a.key}
               type="button"
               disabled={isSending}
-              onClick={() => void send(a)}
+              onClick={() => void send(a.text)}
               className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:opacity-60"
+              title={a.text}
             >
-              {a}
+              {a.label}
             </button>
           ))}
         </div>
@@ -177,7 +245,7 @@ export function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
-          placeholder="Ask something…"
+          placeholder={context.type === "lad" ? "Ask about this district…" : "Ask something…"}
           rows={2}
           disabled={isSending}
           className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-brand-300 focus:ring-4 focus:ring-brand-100 disabled:opacity-60"
