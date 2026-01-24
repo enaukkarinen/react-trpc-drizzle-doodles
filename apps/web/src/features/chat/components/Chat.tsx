@@ -70,12 +70,8 @@ function initialAssistantForContext(context: ChatContext): Msg[] {
 export function Chat() {
   const [searchParams] = useSearchParams();
 
-  // Prefer `label` (new), but accept `district` (old) for compatibility.
   const ref = searchParams.get("ref") ?? "";
-  const uiLabel = searchParams.get("label") ?? searchParams.get("district") ?? undefined;
-
-  // Optional: if you want auto-send when opened from map
-  const autoStart = searchParams.get("autostart") === "1";
+  const uiLabel = searchParams.get("district") ?? undefined;
 
   const context: ChatContext = useMemo(() => {
     if (ref) {
@@ -96,36 +92,15 @@ export function Chat() {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Context-aware quick actions
   const quickActions = useMemo(() => {
     return context.type === "lad" ? LAD_QUICK_ACTIONS : GENERIC_QUICK_ACTIONS;
   }, [context.type]);
 
-  // IMPORTANT: reset initial assistant message when context changes (e.g. user clicks a different district)
   useEffect(() => {
     setMessages(initialAssistantForContext(context));
     setError(null);
     setInput("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.type, context.type === "lad" ? context.ref : "none"]);
-
-  // Optional: auto-start a “facts” question when opened from the map
-  useEffect(() => {
-    if (!autoStart) return;
-    if (context.type !== "lad") return;
-
-    // only auto-send if the chat is “fresh”
-    setMessages((m) => {
-      if (m.length > 1) return m;
-      return m;
-    });
-
-    // fire-and-forget; we purposely don't block UI
-    void send(
-      "Give me a quick factual summary of this district: official name, dates (if present), area (km²), and bbox. Use lad_by_ref.",
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoStart, context.type, context.type === "lad" ? context.ref : "none"]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -142,8 +117,6 @@ export function Chat() {
     setInput("");
 
     try {
-      // If you later add uiMode, you can send it here too:
-      // const { reply, data } = await postChat({ message, context, uiMode: "tool_cards_visible" });
       const { reply, data } = await postChat({ message, context });
       setMessages((m) => [...m, makeAssistant(reply, data)]);
     } catch (e: unknown) {
