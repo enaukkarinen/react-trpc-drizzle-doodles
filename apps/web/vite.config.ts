@@ -6,8 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": "http://localhost:3001",
-      "/tiles": "http://localhost:3001",
-      "/tiles2": "http://localhost:3001",
+      "/tiles": "http://localhost:3001"
     },
   },
 });
