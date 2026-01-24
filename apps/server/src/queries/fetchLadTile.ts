@@ -35,6 +35,7 @@ export async function fetchLadTile({ z, x, y, extent = 4096, buffer = 256 }: Lad
 
   const result = await db
     .select({
+      // to Mapbox Vector Tile format
       tile: sql`ST_AsMVT(q, 'lad', ${extent}, 'geom')`.as("tile"),
     })
     .from(q);
