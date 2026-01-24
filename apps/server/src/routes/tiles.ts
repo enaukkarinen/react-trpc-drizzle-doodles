@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { sql } from "drizzle-orm";
 import { LRUCache } from "lru-cache";
-import { db } from "@einari/db-client";
+import { fetchLadTile } from "../queries/fetchLadTile";
+
 export const tilesRouter = Router();
 
 const tileCache = new LRUCache<string, Buffer>({
@@ -39,39 +39,7 @@ tilesRouter.get("/lad/:z/:x/:y.pbf", async (req, res) => {
     return res.send(cached);
   }
 
-  const result = await db.execute(sql`
-  WITH bounds AS (
-    SELECT ST_TileEnvelope(${z}, ${x}, ${y}) AS tile_bounds
-  )
-  SELECT ST_AsMVT(q, 'lad', ${extent}, 'geom') AS tile
-  FROM (
-    SELECT
-      lad.reference,
-      lad.name,
-      lad.entity,
-      lad.dataset,
-      lad.quality,
-      lad.entry_date,
-      lad.start_date,
-      lad.end_date,
-      ST_AsMVTGeom(
-        ST_Transform(lad.geom, 3857),
-        bounds.tile_bounds,
-        ${extent},
-        ${buffer},
-        true
-      ) AS geom
-    FROM lad
-    CROSS JOIN bounds
-    WHERE ST_Intersects(ST_Transform(lad.geom, 3857), bounds.tile_bounds)
-  ) AS q;
-`);
-
-  console.log(`Served LAD tile z=${z} x=${x} y=${y}`);
-
-  const row = result?.[0];
-
-  const tile = row?.tile;
+  const tile = await fetchLadTile({ z, x, y, extent, buffer });
 
   if (!tile) {
     // Empty tile
