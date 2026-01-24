@@ -26,6 +26,7 @@ export function registerFeedbackListTool(mcp: McpServer) {
       const rows = await db
         .select({
           id: feedback.id,
+          title: feedback.title,
           summary: feedback.summary,
           status: feedback.status,
           createdAt: feedback.createdAt,

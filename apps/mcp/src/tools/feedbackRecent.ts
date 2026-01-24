@@ -4,6 +4,7 @@ import z from "zod";
 
 import { FEEDBACK_STATUSES, feedback } from "@einari/db";
 import { db } from "@einari/db-client";
+import { title } from "node:process";
 
 export function registerFeedbackRecentTool(mcp: McpServer) {
   mcp.registerTool(
@@ -21,6 +22,7 @@ export function registerFeedbackRecentTool(mcp: McpServer) {
       const rows = await db
         .select({
           id: feedback.id,
+          title: feedback.title,
           summary: feedback.summary,
           status: feedback.status,
           createdAt: feedback.createdAt,
