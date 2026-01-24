@@ -47,7 +47,11 @@ tilesRouter.get("/lad/:z/:x/:y.pbf", async (req, res) => {
     return;
   }
 
-  tileCache.set(key, Buffer.isBuffer(tile) ? tile : Buffer.from(tile as any));
+  const buf = Buffer.isBuffer(tile) ? tile : Buffer.from(tile as any);
+  if (buf.length) {
+    tileCache.set(key, buf);
+  }
+
   res.setHeader("X-Tile-Cache", "MISS");
   res.setHeader("Content-Type", "application/x-protobuf");
   res.setHeader("Cache-Control", "public, max-age=3600");
