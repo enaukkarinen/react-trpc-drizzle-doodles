@@ -10,11 +10,7 @@ chatRouter.use(express.json());
 chatRouter.post<{}, any, ChatRequest>("/chat", validateBody(ChatRequestSchema), async (req, res) => {
   try {
     const { message, context } = req.body;
-    if (context?.type === "lad") {
-      // look up LAD by context.ref, enrich prompt / tool input
-    }
-
-    const { reply, traces } = await runChat(message);
+    const { reply, traces } = await runChat(message, context);
 
     const payload = {
       reply,

@@ -1,27 +1,13 @@
 import { ResponseFunctionToolCall, ResponseInputItem, ResponseOutputItem } from "openai/resources/responses/responses";
 import { openai, OPENAI_MODEL } from "./openaiClient.js";
-import { tools, runTool } from "./tools.js";
+import { tools } from "./tools";
 
-import type { ToolTrace } from "@einari/api-contract";
+import type { ChatContext, ToolTrace } from "@einari/api-contract";
+import { buildInstructions } from "./buildInstructions.js";
+import { contextToInput } from "./contextToInput.js";
+import { runTool } from "./runTool.js";
 
-function buildInstructions(uiMode: "tool_cards_visible" | "normal") {
-  return `
-You are a helpful assistant for a feedback tracker app.
-
-You have read-only tools to query feedback items.
-
-IMPORTANT UI RULE:
-- The UI will render tool results automatically when provided.
-- If UI_MODE is tool_cards_visible, do NOT enumerate items in your text reply.
-  Write a short summary (1–2 sentences) and how to proceed (e.g., "Click Get" or "ask to filter").
-
-Never claim you created/edited/deleted data; tools are read-only.
-
-UI_MODE: ${uiMode}
-`.trim();
-}
-
-export async function runChat(message: string): Promise<{ reply: string; traces: ToolTrace[] }> {
+export async function runChat(message: string, context?: ChatContext): Promise<{ reply: string; traces: ToolTrace[] }> {
   const uiMode: "tool_cards_visible" | "normal" =
     /^(recent|open|stats)$/i.test(message.trim()) || /^search\s+/i.test(message.trim())
       ? "tool_cards_visible"
@@ -29,7 +15,7 @@ export async function runChat(message: string): Promise<{ reply: string; traces:
 
   const instructions = buildInstructions(uiMode);
 
-  const input: ResponseInputItem[] = [{ role: "user", content: message }];
+  const input: ResponseInputItem[] = [...contextToInput(context), { role: "user", content: message }];
 
   const traces: ToolTrace[] = [];
 

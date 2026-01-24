@@ -11,7 +11,8 @@ export type ToolTrace = z.infer<typeof ToolTraceSchema>;
 export const LadContextSchema = z.object({
   type: z.literal("lad"),
   ref: z.string().min(1),
-  district: z.string().min(1).optional(),
+  uiLabel: z.string().min(1).optional(),
+  // district: z.string().min(1).optional(),
 });
 
 export const ChatContextSchema = z.discriminatedUnion("type", [
