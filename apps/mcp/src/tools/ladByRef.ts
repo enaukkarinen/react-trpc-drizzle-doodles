@@ -13,13 +13,13 @@ export async function registerLadByRefTool(mcp: McpServer) {
       inputSchema: z.object({ ref: z.string().min(1) }),
     },
     async ({ ref }) => {
-      const lad = await ladByRef(ref);
+      const ladRecord = await ladByRef(ref);
 
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(lad),
+            text: JSON.stringify(ladRecord),
           },
         ],
       };
