@@ -9,7 +9,8 @@ chatRouter.use(express.json());
 
 chatRouter.post<{}, any, ChatRequest>("/chat", validateBody(ChatRequestSchema), async (req, res) => {
   try {
-    const { reply, traces } = await runChat(req.body.message);
+    const { message, context } = req.body;
+    const { reply, traces } = await runChat(message, context);
 
     const payload = {
       reply,

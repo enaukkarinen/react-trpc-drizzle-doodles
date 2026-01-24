@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-/**
- * Tool traces returned by /api/chat.
- */
 export const ToolTraceSchema = z.object({
   name: z.string(),
   args: z.unknown(),
@@ -11,11 +8,26 @@ export const ToolTraceSchema = z.object({
 
 export type ToolTrace = z.infer<typeof ToolTraceSchema>;
 
+export const LadContextSchema = z.object({
+  type: z.literal("lad"),
+  ref: z.string().min(1),
+  uiLabel: z.string().min(1).optional(),
+  // district: z.string().min(1).optional(),
+});
+
+export const ChatContextSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("none") }),
+  LadContextSchema,
+]);
+
+export type ChatContext = z.infer<typeof ChatContextSchema>;
+
 /**
  * POST /api/chat request body
  */
 export const ChatRequestSchema = z.object({
   message: z.string().min(1),
+  context: ChatContextSchema.optional(),
 });
 
 export type ChatRequest = z.infer<typeof ChatRequestSchema>;

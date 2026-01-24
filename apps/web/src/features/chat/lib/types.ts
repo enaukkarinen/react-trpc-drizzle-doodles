@@ -13,6 +13,7 @@ export type Msg = {
 
 export type ToolOutputListItem = {
   id: string;
+  title?: string;
   summary?: string;
   status?: FeedbackStatus;
   createdAt?: string;
