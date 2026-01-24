@@ -11,9 +11,6 @@ importers:
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.8
-      vite:
-        specifier: ^5.4.0
-        version: 5.4.21(@types/node@20.0.0)
     devDependencies:
       '@types/node':
         specifier: 20.0.0
