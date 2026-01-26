@@ -34,7 +34,7 @@ const layers = useMemo(
   [],
 );
 
-export function GoogleMapPage() {
+export default function GoogleMapPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-2">

@@ -6,11 +6,11 @@ import { FeedbackDetailPage } from "./pages/FeedbackDetailPage";
 
 import { NavigationBar } from "./components/NavigationBar";
 import { lazy, Suspense } from "react";
-import { GoogleMapPage } from "./features/google-map/pages/GoogleMapPage";
 import { LearningPage } from "./features/learning/pages/LearningPage";
 
 const ChatPage = lazy(() => import("./features/chat/pages/ChatPage"));
 const MapPage = lazy(() => import("./features/map/pages/MapPage"));
+const GoogleMapPage = lazy(() => import("./features/google-map/pages/GoogleMapPage"));
 
 export default function App() {
   return (
@@ -31,6 +31,7 @@ export default function App() {
               </Suspense>
             }
           />
+
           <Route
             path="/map"
             element={
@@ -40,7 +41,14 @@ export default function App() {
             }
           />
 
-          <Route path="/google-map" element={<GoogleMapPage />} />
+          <Route
+            path="/google-map"
+            element={
+              <Suspense fallback={<div>Loading map…</div>}>
+                <GoogleMapPage />
+              </Suspense>
+            }
+          />
 
           <Route path="/learning" element={<LearningPage />} />
 
