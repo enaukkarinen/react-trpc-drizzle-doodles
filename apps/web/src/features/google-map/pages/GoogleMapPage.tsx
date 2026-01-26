@@ -7,7 +7,7 @@ import type { DeckProps } from "@deck.gl/core";
 
 function DeckGLOverlay(props: DeckProps) {
   const map = useMap();
-  const overlay = useMemo(() => new GoogleMapsOverlay(props), []);
+  const overlay = useMemo(() => new GoogleMapsOverlay({}), []);
 
   useEffect(() => {
     overlay.setMap(map);
