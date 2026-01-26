@@ -12,22 +12,28 @@ function DeckGLOverlay(props: DeckProps) {
   useEffect(() => {
     overlay.setMap(map);
     return () => overlay.setMap(null);
-  }, [map]);
+  }, [map, overlay]);
 
-  overlay.setProps(props);
+  useEffect(() => {
+    overlay.setProps(props);
+  }, [overlay, props]);
+
   return null;
 }
 
 export function GoogleMapPage() {
-  const layers = [
-    new ScatterplotLayer({
-      id: "deckgl-circle",
-      data: [{ position: [0.45, 51.47] }],
-      getPosition: (d) => d.position,
-      getFillColor: [255, 0, 0, 100],
-      getRadius: 1000,
-    }),
-  ];
+  const layers = useMemo(
+    () => [
+      new ScatterplotLayer({
+        id: "deckgl-circle",
+        data: [{ position: [0.45, 51.47] }],
+        getPosition: (d) => d.position,
+        getFillColor: [255, 0, 0, 100],
+        getRadius: 1000,
+      }),
+    ],
+    [],
+  );
 
   return (
     <div className="space-y-6">
