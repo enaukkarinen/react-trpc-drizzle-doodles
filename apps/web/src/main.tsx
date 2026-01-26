@@ -21,7 +21,7 @@ const trpcClient = trpc.createClient({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
+  // <StrictMode> Does not work well with map libraries :(
     <Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
