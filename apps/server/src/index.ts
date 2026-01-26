@@ -6,9 +6,17 @@ import { appRouter } from "@einari/api";
 
 import { createContext } from "./trpc/createContext";
 
+import { chatRouter } from "./routes/chat";
+
+import { tilesRouter } from "./routes/tiles";
+
 const app = express();
 
 app.use(cors({ origin: "http://localhost:5173" }));
+
+app.use("/api", chatRouter);
+
+app.use("/tiles", tilesRouter);
 
 app.use(
   "/trpc",
