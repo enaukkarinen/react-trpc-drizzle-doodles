@@ -21,20 +21,20 @@ function DeckGLOverlay(props: DeckProps) {
   return null;
 }
 
-export function GoogleMapPage() {
-  const layers = useMemo(
-    () => [
-      new ScatterplotLayer({
-        id: "deckgl-circle",
-        data: [{ position: [0.45, 51.47] }],
-        getPosition: (d) => d.position,
-        getFillColor: [255, 0, 0, 100],
-        getRadius: 1000,
-      }),
-    ],
-    [],
-  );
+const layers = useMemo(
+  () => [
+    new ScatterplotLayer({
+      id: "deckgl-circle",
+      data: [{ position: [0.45, 51.47] }],
+      getPosition: (d) => d.position,
+      getFillColor: [255, 0, 0, 100],
+      getRadius: 1000,
+    }),
+  ],
+  [],
+);
 
+export function GoogleMapPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-2">
