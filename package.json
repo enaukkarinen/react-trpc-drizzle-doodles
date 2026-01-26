@@ -10,7 +10,8 @@
     "db:build": "docker compose -f docker/docker-compose.yml up -d",
     "db:generate": "dotenv -e apps/server/env/server.env -- drizzle-kit generate",
     "db:migrate": "dotenv -e apps/server/env/server.env -- drizzle-kit migrate",
-    "db:populate": "dotenv -e apps/server/env/server.env -- tsx apps/server/scripts/import-lad-geojson.ts"
+    "db:populate": "dotenv -e apps/server/env/server.env -- tsx apps/server/scripts/import-lad-geojson.ts",
+    "kb:ingest": "dotenv -e apps/server/env/server.env -- tsx apps/server/scripts/kb-ingest.ts"
   },
   "devDependencies": {
     "@types/node": "20.0.0",

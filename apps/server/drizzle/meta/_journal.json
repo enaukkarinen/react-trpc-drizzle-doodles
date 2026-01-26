@@ -29,6 +29,13 @@
       "when": 1769449956834,
       "tag": "0003_vector_extension",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1769453004892,
+      "tag": "0004_dazzling_rhino",
+      "breakpoints": true
     }
   ]
 }
