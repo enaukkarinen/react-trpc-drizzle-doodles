@@ -21,7 +21,7 @@ const trpcClient = trpc.createClient({
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
+  <StrictMode>
     <Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -29,5 +29,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>
-  // </StrictMode>,
+ </StrictMode>,
 );

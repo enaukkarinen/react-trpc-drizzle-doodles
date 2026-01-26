@@ -53,7 +53,6 @@ export default function MapPage() {
             initialViewState={INITIAL_VIEW_STATE}
             controller
             layers={layers}
-            onError={(err) => console.error("DeckGL error:", err)}
           >
             <Map reuseMaps mapStyle="https://demotiles.maplibre.org/style.json" attributionControl={false} />
           </DeckGL>
