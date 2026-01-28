@@ -289,6 +289,9 @@ importers:
       '@einari/db-client':
         specifier: workspace:^
         version: link:../db-client
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(postgres@3.4.8)

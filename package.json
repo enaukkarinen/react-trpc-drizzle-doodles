@@ -2,7 +2,7 @@
   "name": "feedback-doodles",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev": "pnpm -r --stream --reporter append-only dev",
+    "dev": "pnpm --filter @einari/server dev & pnpm --filter @einari/mcp dev & pnpm --filter @einari/web dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",

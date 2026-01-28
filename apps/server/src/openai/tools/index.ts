@@ -1,5 +1,3 @@
-import { feedbackTools } from "./feedbackTools";
-import { ladTools } from "./ladTools";
-import { ToolDefinition } from "../types";
+import { toolRegistry } from "./toolRegistry";
 
-export const tools: ToolDefinition[] = [...feedbackTools, ...ladTools];
+export const tools = Object.values(toolRegistry).map((t) => t.openai);
