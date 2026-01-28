@@ -30,6 +30,9 @@ importers:
       '@einari/db-client':
         specifier: workspace:*
         version: link:../../packages/db-client
+      '@einari/kb':
+        specifier: workspace:^
+        version: link:../../packages/kb
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.0
         version: 1.25.2(hono@4.11.4)(zod@3.25.76)
@@ -70,6 +73,9 @@ importers:
       '@einari/db-client':
         specifier: workspace:^
         version: link:../../packages/db-client
+      '@einari/kb':
+        specifier: workspace:^
+        version: link:../../packages/kb
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.0
         version: 1.25.2(hono@4.11.4)(zod@3.25.76)
@@ -274,6 +280,21 @@ importers:
       postgres:
         specifier: ^3.4.8
         version: 3.4.8
+
+  packages/kb:
+    dependencies:
+      '@einari/db':
+        specifier: workspace:^
+        version: link:../db
+      '@einari/db-client':
+        specifier: workspace:^
+        version: link:../db-client
+      drizzle-orm:
+        specifier: ^0.45.1
+        version: 0.45.1(postgres@3.4.8)
+      openai:
+        specifier: ^6.16.0
+        version: 6.16.0(zod@3.25.76)
 
 packages:
 

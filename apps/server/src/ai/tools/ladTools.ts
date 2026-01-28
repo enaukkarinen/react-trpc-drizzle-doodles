@@ -1,5 +1,7 @@
 import { ToolDefinition } from "../types";
 
+// OpenAI tool descriptions are more instructional than MCP tool descriptions.
+// MCP tools are the canonical interface; these descriptions are optimized for model routing.
 export const ladTools: ToolDefinition[] = [
   {
     type: "function",
