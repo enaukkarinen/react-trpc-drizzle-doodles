@@ -15,3 +15,14 @@ export const feedback = pgTable("feedback", {
     .notNull()
     .defaultNow(),
 });
+
+export const comment = pgTable("comment", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  feedbackId: uuid("feedback_id")
+    .notNull()
+    .references(() => feedback.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
