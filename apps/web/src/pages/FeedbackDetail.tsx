@@ -11,10 +11,10 @@ import { EditableSummary } from "../components/EditableSummary";
 
 import { DeleteButton } from "../components/DeleteButton";
 import { CommentInput } from "../components/CommentInput";
+import { useCreateComment } from "../hooks/useCreateComment";
 
 export function FeedbackDetail() {
   const { id } = useParams<{ id: string }>();
-  const utils = trpc.useUtils();
 
   const { data: feedback } = trpc.feedback.byId.useQuery(
     { id: id ?? "" },
@@ -25,16 +25,17 @@ export function FeedbackDetail() {
     { feedbackId: id ?? "" },
     { enabled: Boolean(id) },
   );
-  const createComment = trpc.comment.create.useMutation({
-    onSuccess: () => {
-      utils.comment.listByFeedbackId.invalidate();
-    },
-  });
+  // const createComment = trpc.comment.create.useMutation({
+  //   onSuccess: () => {
+  //     utils.comment.listByFeedbackId.invalidate();
+  //   },
+  // });
 
   const navigate = useNavigate();
   const updateStatus = useUpdateStatus();
   const updateTitle = useUpdateTitle();
   const updateSummary = useUpdateSummary();
+  const createComment = useCreateComment();
 
   if (!id || !feedback) {
     return (
@@ -150,6 +151,7 @@ export function FeedbackDetail() {
                   <div className="mt-2 text-xs text-slate-500">
                     Posted on {formatDateTime(comment.createdAt)}
                   </div>
+                  {/*    <p>{comment.id}</p> */}
                 </div>
               ))}
             </div>
