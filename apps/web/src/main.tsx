@@ -9,6 +9,8 @@ import "./index.css";
 
 const Provider = trpc.Provider;
 
+// global cache for React Query
+// also used by tRPC Provider
 const queryClient = new QueryClient();
 
 const trpcClient = trpc.createClient({
