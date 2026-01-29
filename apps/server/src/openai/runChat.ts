@@ -5,7 +5,7 @@ import { tools } from "./tools";
 import type { ChatContext, ToolTrace } from "@einari/api-contract";
 import { buildInstructions } from "./buildInstructions.js";
 import { contextToInput } from "./contextToInput.js";
-import { runTool } from "./runTool.js";
+import { runTool } from "./runTool";
 
 export async function runChat(message: string, context?: ChatContext): Promise<{ reply: string; traces: ToolTrace[] }> {
   const uiMode: "tool_cards_visible" | "normal" =

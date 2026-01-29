@@ -1,0 +1,14 @@
+{
+  "name": "@einari/kb",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "dependencies": {
+    "@einari/db": "workspace:^",
+    "@einari/db-client": "workspace:^",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
+    "openai": "^6.16.0"
+  }
+}

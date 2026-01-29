@@ -13,6 +13,7 @@
     "@einari/api-contract": "workspace:^",
     "@einari/db": "workspace:^",
     "@einari/db-client": "workspace:^",
+    "@einari/kb": "workspace:^",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@trpc/server": "^11.0.0",
     "@types/geojson": "^7946.0.16",

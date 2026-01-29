@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { runChat } from "../ai/runChat.js";
+import { runChat } from "../openai/runChat.js";
 import { ChatRequest, ChatRequestSchema } from "@einari/api-contract";
 
 import { validateBody } from "../middleware/validateBody.js";

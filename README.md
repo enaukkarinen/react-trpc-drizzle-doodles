@@ -43,6 +43,18 @@ pnpm db:migrate
 pnpm dev
 ```
 
+### 6) Populate database (map tiles)
+
+```bash
+pnpm db:populate
+```
+
+### 7) Create and store embeddings 
+
+```bash
+pnpm kb:ingest
+```
+
 Open:
 
 - Web: [http://localhost:5173](http://localhost:5173)
