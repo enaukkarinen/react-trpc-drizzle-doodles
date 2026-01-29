@@ -9,14 +9,18 @@ export function useUpdateSummary() {
 
   return trpc.feedback.updateSummary.useMutation({
     onMutate: async ({ id, summary }) => {
+      // 1. Cancel any outgoing fetches
       await utils.feedback.byId.cancel({ id });
 
+      // 2. Snapshot the previous value (for rollback)
       const prevById = utils.feedback.byId.getData({ id });
 
+      // 3. Optimistically update the byId cache
       utils.feedback.byId.setData({ id }, (old) =>
         old ? { ...old, summary } : old,
       );
 
+      // 4. Update list cache: find and update the summary in the feedback list
       qc.setQueriesData({ queryKey: FEEDBACK_LIST_KEY }, (old: unknown) => {
         if (!Array.isArray(old)) return old;
         return old.map((item: any) =>
@@ -24,6 +28,7 @@ export function useUpdateSummary() {
         );
       });
 
+      // 5. Return context with the previous value (see onError())
       return { prevById };
     },
 
