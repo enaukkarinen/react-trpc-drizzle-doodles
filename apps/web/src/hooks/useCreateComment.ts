@@ -1,10 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { trpc } from "../trpc";
 
 export function useCreateComment() {
   // Implementation goes here
   const utils = trpc.useUtils();
-  const qc = useQueryClient();
 
   return trpc.comment.create.useMutation({
     onMutate: async ({ feedbackId, content }) => {
