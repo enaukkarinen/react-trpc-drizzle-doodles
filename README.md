@@ -77,6 +77,8 @@ Open:
 - Ingest KB markdown + embeddings: `pnpm kb:ingest`
 - Test KB search locally: `pnpm kb:test`
 
+Performance note: KB similarity search relies on a vector index. A migration adds an HNSW index on `kb_chunk.embedding` for fast cosine distance queries.
+
 ## Troubleshooting
 
 ### Postgres auth errors on first run
