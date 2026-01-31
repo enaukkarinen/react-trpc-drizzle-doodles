@@ -8,6 +8,49 @@
       "when": 1768623153523,
       "tag": "0000_ambiguous_blazing_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1769158579449,
+      "tag": "0001_parched_silver_centurion",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769207816388,
+      "tag": "0002_create_lad_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1769449956834,
+      "tag": "0003_vector_extension",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1769453004892,
+      "tag": "0004_dazzling_rhino",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1769865181699,
+      "tag": "0005_soft_phalanx",
+      "breakpoints": true
+    }
+    ,
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1769900000000,
+      "tag": "0006_kb_chunk_embedding_hnsw",
+      "breakpoints": true
     }
   ]
 }

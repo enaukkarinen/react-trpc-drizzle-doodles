@@ -2,7 +2,7 @@ import { t } from "../trpcBase";
 
 const loggingEnabled = !!process.env.TRPC_LOGGING;
 
-export const loggingMiddleware = t.middleware(async ({ ctx, type, next }) => {
+export const loggingMiddleware = t.middleware(async ({ ctx, next }) => {
   if (!loggingEnabled) return next();
 
   const start = Date.now();

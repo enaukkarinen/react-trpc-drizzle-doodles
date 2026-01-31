@@ -1,0 +1,1 @@
+ALTER TABLE "kb_chunk" ADD CONSTRAINT "kb_chunk_document_id_kb_document_id_fk" FOREIGN KEY ("document_id") REFERENCES "public"."kb_document"("id") ON DELETE cascade ON UPDATE cascade;
