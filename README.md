@@ -1,3 +1,7 @@
+# Feedback Doodles
+
+For an end-to-end architecture and feature overview, see [DESCRIPTION.md](DESCRIPTION.md).
+
 ## Quick start
 
 ### Prerequisites
@@ -18,17 +22,19 @@ pnpm install
 docker compose up -d
 ```
 
-### 3) Create env files (2)
+### 3) Create env files (3)
 
-This project uses two separate env files:
-- one for the server runtime (Node, loaded via dotenv)
-- one for the web app (Vite, injected at build time)
+This project uses three env files:
+- Server runtime (Node, loaded via dotenv)
+- Web app (Vite, injected at build time)
+- MCP tool server (Node, loaded via dotenv)
 
-Copy the examples and adjust if needed:
+Copy the examples and adjust if needed (ensure `OPENAI_API_KEY` is set in the server env):
 
 ```bash
 cp apps/server/env/server.env.example apps/server/env/server.env
 cp apps/web/.env.example apps/web/.env
+cp apps/mcp/env/mcp.env.example apps/mcp/env/mcp.env
 ```
 
 ### 4) Run database migrations
@@ -37,16 +43,41 @@ cp apps/web/.env.example apps/web/.env
 pnpm db:migrate
 ```
 
-### 5) Run the app (web + server)
+### 5) Run the app (web + server + MCP)
 
 ```bash
 pnpm dev
 ```
 
+### 6) Populate database (map tiles)
+
+```bash
+pnpm db:populate
+```
+
+### 7) Create and store embeddings 
+
+```bash
+pnpm kb:ingest
+```
+
+The ingest script computes embeddings first, then upserts the document and its chunks inside a single transaction per file. Chunks are linked to their document via a foreign key with cascade on delete/update.
+
 Open:
 
 - Web: [http://localhost:5173](http://localhost:5173)
 - API (tRPC): [http://localhost:3001/trpc](http://localhost:3001/trpc)
+- MCP (HTTP): [http://localhost:3333/mcp](http://localhost:3333/mcp)
+
+## Useful scripts
+
+- Build/start Postgres via Docker: `pnpm db:build`
+- Generate/migrate schema (Drizzle): `pnpm db:generate` / `pnpm db:migrate`
+- Populate LAD polygons/metadata: `pnpm db:populate`
+- Ingest KB markdown + embeddings: `pnpm kb:ingest`
+- Test KB search locally: `pnpm kb:test`
+
+Performance note: KB similarity search relies on a vector index. A migration adds an HNSW index on `kb_chunk.embedding` for fast cosine distance queries.
 
 ## Troubleshooting
 
@@ -57,6 +88,11 @@ If you see password authentication failed, check that no other Postgres containe
 `docker compose down -v`
 
 `docker compose up -d`
+
+### Chat or KB errors
+
+- Ensure `OPENAI_API_KEY` is set in `apps/server/env/server.env`.
+- Ensure the MCP server is running (it starts via `pnpm dev`) and that `MCP_URL` and `MCP_AUTH_TOKEN` in the server env match `apps/mcp/env/mcp.env`.
 
 ## Repo structure
 

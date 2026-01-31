@@ -4,6 +4,7 @@ import { registerFeedbackRecentTool } from "./feedbackRecent";
 import { registerFeedbackSearchTool } from "./feedbackSearch";
 import { registerFeedbackStatsTool } from "./feedbackStats";
 import { registerLadByRefTool } from "./ladByRef";
+import { registerKbSearchTool } from "./kbSearch";
 
 export function registerTools(mcp: any) {
   registerFeedbackListTool(mcp);
@@ -12,4 +13,5 @@ export function registerTools(mcp: any) {
   registerFeedbackSearchTool(mcp);
   registerFeedbackStatsTool(mcp);
   registerLadByRefTool(mcp);
+  registerKbSearchTool(mcp);
 }
