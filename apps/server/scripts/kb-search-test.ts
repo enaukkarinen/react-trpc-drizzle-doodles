@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { kbSearch } from "@einari/kb"
+import { kbSearch } from "@einari/kb";
 
 async function main() {
   const results = await kbSearch("how is the repo structured?", 5);
