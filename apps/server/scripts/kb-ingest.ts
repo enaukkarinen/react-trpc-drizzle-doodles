@@ -49,54 +49,68 @@ async function main() {
     const title = path.basename(file);
     const content = await fs.readFile(file, "utf8");
 
-    // upsert document by source
-    const [doc] = await db
-      .insert(kbDocument)
-      .values({ title, source: rel })
-      .onConflictDoUpdate({
-        target: kbDocument.source,
-        set: { title },
-      })
-      .returning({ id: kbDocument.id });
-
     const chunks = chunkText(content);
     const hashes = chunks.map((c) => sha256(`${rel}:${c}`));
 
-    // embed in batches
+    // Precompute embeddings outside the transaction to keep it short
     const batchSize = 32;
+    const chunkRecords: Array<{
+      chunkIndex: number;
+      content: string;
+      contentHash: string;
+      embedding: number[];
+    }> = [];
     for (let i = 0; i < chunks.length; i += batchSize) {
       const batchChunks = chunks.slice(i, i + batchSize);
-
       const embRes = await openai.embeddings.create({
         model: "text-embedding-3-small",
         input: batchChunks,
       });
-
       for (let j = 0; j < batchChunks.length; j++) {
         const chunkIndex = i + j;
         const contentHash = hashes[chunkIndex];
-        const embedding = embRes.data[j].embedding;
+        const embedding = embRes.data[j].embedding as number[];
+        chunkRecords.push({
+          chunkIndex,
+          content: batchChunks[j],
+          contentHash,
+          embedding,
+        });
+      }
+    }
 
-        await db
+    // Upsert document and all chunks in a single transaction per file
+    await db.transaction(async (tx) => {
+      const [doc] = await tx
+        .insert(kbDocument)
+        .values({ title, source: rel })
+        .onConflictDoUpdate({
+          target: kbDocument.source,
+          set: { title },
+        })
+        .returning({ id: kbDocument.id });
+
+      for (const r of chunkRecords) {
+        await tx
           .insert(kbChunk)
           .values({
             documentId: doc.id,
-            chunkIndex,
-            content: batchChunks[j],
-            contentHash,
-            embedding, // number[]
+            chunkIndex: r.chunkIndex,
+            content: r.content,
+            contentHash: r.contentHash,
+            embedding: r.embedding,
           })
           .onConflictDoUpdate({
             target: kbChunk.contentHash,
             set: {
               documentId: doc.id,
-              chunkIndex,
-              content: batchChunks[j],
-              embedding,
+              chunkIndex: r.chunkIndex,
+              content: r.content,
+              embedding: r.embedding,
             },
           });
       }
-    }
+    });
 
     console.log(`Ingested ${rel} (${chunks.length} chunks)`);
   }

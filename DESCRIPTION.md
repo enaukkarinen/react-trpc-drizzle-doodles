@@ -79,6 +79,7 @@ The intent is to explore a practical workflow where a chat assistant can answer 
 - Feedback: [packages/db/src/schema/feedback.ts](packages/db/src/schema/feedback.ts)
 - LAD geometry & metadata: [packages/db/src/schema/lad.ts](packages/db/src/schema/lad.ts)
 - Knowledge Base: documents + chunks + `vector(1536)`: [packages/db/src/schema/knowledgeBase.ts](packages/db/src/schema/knowledgeBase.ts)
+  - Foreign key: `kb_chunk.document_id` references `kb_document.id` with cascade on delete/update.
 - Vector type: [packages/db/src/types/vector.ts](packages/db/src/types/vector.ts)
 - Drizzle config: [drizzle.config.ts](drizzle.config.ts) outputs migrations into `apps/server/drizzle/`
 - pgvector extension migration: [apps/server/drizzle/0003_vector_extension.sql](apps/server/drizzle/0003_vector_extension.sql)
@@ -96,6 +97,7 @@ The intent is to explore a practical workflow where a chat assistant can answer 
 - Generate embeddings via OpenAI `text-embedding-3-small`.
 - Store embeddings in pgvector; search ranks by cosine distance.
 - Code: [kbSearch](packages/kb/src/kbSearch.ts), ingest: [apps/server/scripts/kb-ingest.ts](apps/server/scripts/kb-ingest.ts), test: [apps/server/scripts/kb-search-test.ts](apps/server/scripts/kb-search-test.ts)
+  - Transactions: embeddings are computed first; document and its chunks are upserted within a single DB transaction per file to keep data consistent and transactions short.
 
 
 **Safety & Trust Boundaries**

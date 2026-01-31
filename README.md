@@ -61,6 +61,8 @@ pnpm db:populate
 pnpm kb:ingest
 ```
 
+The ingest script computes embeddings first, then upserts the document and its chunks inside a single transaction per file. Chunks are linked to their document via a foreign key with cascade on delete/update.
+
 Open:
 
 - Web: [http://localhost:5173](http://localhost:5173)

@@ -17,7 +17,10 @@ export const kbChunk = pgTable(
   "kb_chunk",
   (t) => ({
     id: t.uuid("id").defaultRandom().primaryKey(),
-    documentId: t.uuid("document_id").notNull(),
+    documentId: t
+      .uuid("document_id")
+      .notNull()
+      .references(() => kbDocument.id, { onDelete: "cascade", onUpdate: "cascade" }),
     chunkIndex: t.integer("chunk_index").notNull(),
     content: t.text("content").notNull(),
     contentHash: t.text("content_hash").notNull(),
