@@ -19,7 +19,7 @@ pnpm install
 ### 2) Start Postgres
 
 ```bash
-docker compose up -d
+docker compose -f ./docker/docker-compose.yml up -d
 ```
 
 ### 3) Create env files (3)
