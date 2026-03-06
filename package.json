@@ -1,5 +1,5 @@
 {
-  "name": "feedback-doodles",
+  "name": "react-trpc-drizzle-doodles",
   "packageManager": "pnpm@9.0.0",
   "scripts": {
     "dev": "pnpm -r --parallel --stream --reporter append-only dev",
