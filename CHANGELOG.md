@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/enaukkarinen/react-trpc-drizzle-doodles/compare/v1.0.0...v1.0.1) (2026-03-06)
+
+
+### Bug Fixes
+
+* update package name to match repository ([2746a37](https://github.com/enaukkarinen/react-trpc-drizzle-doodles/commit/2746a37f7109e78be71febdf32158a17e1c88cb0))
+
 ## 1.0.0 (2026-02-01)
 
 
